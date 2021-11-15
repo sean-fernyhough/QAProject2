@@ -30,7 +30,7 @@ public class MovieControllerUnitTest {
 		cast.add(actor1);
 		cast.add(actor2);
 		Movie movie = new Movie("title", "synopsis", 1990, cast, 3.7);
-		Movie createdMovie = new Movie(1, "title", "synopsis", 1990, cast, 3.7);
+		Movie createdMovie = new Movie(1l, "title", "synopsis", 1990, cast, 3.7);
 		Mockito.when(service.create(movie)).thenReturn(createdMovie);
 		
 		AssertEquals(new ResponseEntity<Movie>(createdMovie, HttpStatus.CREATED), controller.create(movie));
@@ -46,8 +46,8 @@ public class MovieControllerUnitTest {
 		cast.add(actor1);
 		cast.add(actor2);
 		
-		Movie movie1 = new Movie(1, "title", "synopsis", 1990, cast, 3.7);
-		Movie movie2 = new Movie(2, "title", "synopsis", 2002, cast, 4.8);
+		Movie movie1 = new Movie(1l, "title", "synopsis", 1990, cast, 3.7);
+		Movie movie2 = new Movie(2l, "title", "synopsis", 2002, cast, 4.8);
 		List<Movie> movies = new ArrayList<Movie>();
 		movies.add(movie1);
 		movies.add(movie2);
@@ -67,12 +67,22 @@ public class MovieControllerUnitTest {
 		cast.add(actor1);
 		cast.add(actor2);
 		Movie movie = new Movie("title", "synopsis", 1990, cast, 3.7);
-		Movie updatedMovie = new Movie(1, "updated", "movie", 1990, cast, 3.7);
-		Mockito.when(service.update(1, movie)).thenReturn(updatedMovie);
+		Movie updatedMovie = new Movie(1l, "updated", "movie", 1990, cast, 3.7);
+		Mockito.when(service.update(1l, movie)).thenReturn(updatedMovie);
 		
-		AssertEquals(new ResponseEntity<Movie>(updatedMovie, HttpStatus.CREATED), controller.update(1, movie));
+		AssertEquals(new ResponseEntity<Movie>(updatedMovie, HttpStatus.CREATED), controller.update(1l, movie));
 		
-		Mockito.verify(service, times(1)).update(1, movie);
+		Mockito.verify(service, times(1)).update(1l, movie);
+	}
+
+	@Test
+	void deleteTest() {
+
+		Mockito.when(service.delete(1l)).thenReturn(true);
+		
+		AssertEquals(new ResponseEntity<Movie>(HttpStatus.NO_CONTENT), controller.delete(1l));
+		
+		Mockito.verify(service, times(1)).delete(1l);
 	}
 	
 }
