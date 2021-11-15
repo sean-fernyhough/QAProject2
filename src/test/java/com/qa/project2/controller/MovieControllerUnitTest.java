@@ -59,4 +59,20 @@ public class MovieControllerUnitTest {
 		Mockito.verify(service, times(1)).readAll();
 	}
 	
+	@Test
+	void updateTest() {
+		Actor actor1 = new Actor("sample", "actor1");
+		Actor actor2 = new Actor("sample", "actor2");
+		List<Actor> cast = new ArrayList<Actor>();
+		cast.add(actor1);
+		cast.add(actor2);
+		Movie movie = new Movie("title", "synopsis", 1990, cast, 3.7);
+		Movie updatedMovie = new Movie(1, "updated", "movie", 1990, cast, 3.7);
+		Mockito.when(service.update(1, movie)).thenReturn(updatedMovie);
+		
+		AssertEquals(new ResponseEntity<Movie>(updatedMovie, HttpStatus.CREATED), controller.update(1, movie));
+		
+		Mockito.verify(service, times(1)).update(1, movie);
+	}
+	
 }
