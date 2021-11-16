@@ -25,5 +25,11 @@ public class ActorService {
 		return repo.findAll();
 	}
 	
+	public Actor update(long id, Actor actor) {
+		Actor existing = repo.findById(id).orElseThrow(ActorNotFoundException::new);
+		existing.setFirstName(actor.getFirstName());
+		existing.setLastName(actor.getLastName());
+		return repo.saveAndFlush(existing);
+	}
 	
 }
