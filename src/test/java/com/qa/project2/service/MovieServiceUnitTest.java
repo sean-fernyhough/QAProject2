@@ -54,7 +54,7 @@ public class MovieServiceUnitTest {
 		Movie movie = new Movie(1l, "title", "synopsis", 1990, cast, 3.7);
 		Movie updatedMovie = new Movie(1l, "updatedTitle", "synopsis", 1990, cast, 3.7);
 		
-		Mockito.when(repo.findById(1).get()).thenReturn(movie);
+		Mockito.when(repo.findById(1l).get()).thenReturn(movie);
 		Mockito.when(repo.saveAndFlush(updatedMovie)).thenReturn(updatedMovie);
 		
 		Assertions.assertEquals(updatedMovie, service.update(1l, updatedMovie));
@@ -62,4 +62,16 @@ public class MovieServiceUnitTest {
 		Mockito.verify(repo, times(1)).findById(1);
 		Mockito.verify(repo, times(1)).saveAndFlush(movie);
 	}
+	
+	@Test
+	void deleteTest() {
+		
+		Mockito.when(repo.existsById(1l)).thenReturn(true, false);
+		
+		Assertions.assertEquals(true, service.delete(1l));
+		
+		Mockito.verify(repo, times(1)).deleteById(1l);
+		Mockito.verify(repo, times(2)).existsById(1l);
+	}
+	
 }
