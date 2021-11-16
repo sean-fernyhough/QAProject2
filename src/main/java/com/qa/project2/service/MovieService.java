@@ -1,10 +1,12 @@
 package com.qa.project2.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.qa.project2.domain.Movie;
+import com.qa.project2.exceptions.MovieNotFoundException;
 import com.qa.project2.repo.MovieRepo;
 
 @Service
@@ -25,7 +27,7 @@ public class MovieService {
 	}
 	
 	public Movie update(long id, Movie movie) {
-		Movie existing = repo.findById(id).get();
+		Movie existing = repo.findById(id).orElseThrow(MovieNotFoundException::new);
 		existing.setTitle(movie.getTitle());
 		existing.setSynopsis(movie.getSynopsis());
 		existing.setRating(movie.getRating());
@@ -35,5 +37,10 @@ public class MovieService {
 		return repo.saveAndFlush(existing);
 	}
 	
+	public boolean delete(long id) {
+		if (!repo.existsById(id)){throw new MovieNotFoundException();};
+		repo.deleteById(id);
+		return !repo.existsById(id);
+	}
 	
 }
