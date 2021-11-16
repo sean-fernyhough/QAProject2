@@ -5,6 +5,7 @@ import static org.mockito.Mockito.times;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class ActorControllerUnitTest {
 
 		Mockito.when(service.create(actor)).thenReturn(createdActor);
 
-		AssertEquals(new ResponseEntity<Actor>(createdActor, HttpStatus.CREATED), controller.create(actor));
+		Assertions.assertEquals(new ResponseEntity<Actor>(createdActor, HttpStatus.CREATED), controller.create(actor));
 
 		Mockito.verify(service, times(1)).create(actor);
 	}
@@ -39,7 +40,7 @@ public class ActorControllerUnitTest {
 		
 		Mockito.when(service.update(1l, actor)).thenReturn(updatedActor);
 		
-		AssertEquals(new ResponseEntity<Actor>(updatedActor, HttpStatus.ACCEPTED), controller.update(1l, actor));
+		Assertions.assertEquals(new ResponseEntity<Actor>(updatedActor, HttpStatus.ACCEPTED), controller.update(1l, actor));
 		
 		Mockito.verify(service, times(1)).update(1l, actor);
 	}
@@ -49,7 +50,7 @@ public class ActorControllerUnitTest {
 
 		Mockito.when(service.delete(1l)).thenReturn(true);
 		
-		AssertEquals(new ResponseEntity<Actor>(HttpStatus.NO_CONTENT), controller.delete(1l));
+		Assertions.assertEquals(new ResponseEntity<Actor>(HttpStatus.NO_CONTENT), controller.delete(1l));
 		
 		Mockito.verify(service, times(1)).delete(1l);
 	}
@@ -64,7 +65,7 @@ public class ActorControllerUnitTest {
 
 		Mockito.when(service.readAll()).thenReturn(actors);
 		
-		AssertEquals(new ResponseEntity<List<Actor>>(actors, HttpStatus.OK), controller.readAll());
+		Assertions.assertEquals(new ResponseEntity<List<Actor>>(actors, HttpStatus.OK), controller.readAll());
 		
 		Mockito.verify(service, times(1)).readAll();
 	}

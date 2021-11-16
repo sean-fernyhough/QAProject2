@@ -5,6 +5,7 @@ import static org.mockito.Mockito.times;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +34,7 @@ public class MovieControllerUnitTest {
 		Movie createdMovie = new Movie(1l, "title", "synopsis", 1990, cast, 3.7);
 		Mockito.when(service.create(movie)).thenReturn(createdMovie);
 		
-		AssertEquals(new ResponseEntity<Movie>(createdMovie, HttpStatus.CREATED), controller.create(movie));
+		Assertions.assertEquals(new ResponseEntity<Movie>(createdMovie, HttpStatus.CREATED), controller.create(movie));
 		
 		Mockito.verify(service, times(1)).create(movie);
 	}
@@ -54,7 +55,7 @@ public class MovieControllerUnitTest {
 		
 		Mockito.when(service.readAll()).thenReturn(movies);
 		
-		AssertEquals(new ResponseEntity<List<Movie>>(movies, HttpStatus.OK), controller.readAll());
+		Assertions.assertEquals(new ResponseEntity<List<Movie>>(movies, HttpStatus.OK), controller.readAll());
 		
 		Mockito.verify(service, times(1)).readAll();
 	}
@@ -70,7 +71,7 @@ public class MovieControllerUnitTest {
 		Movie updatedMovie = new Movie(1l, "updated", "movie", 1990, cast, 3.7);
 		Mockito.when(service.update(1l, movie)).thenReturn(updatedMovie);
 		
-		AssertEquals(new ResponseEntity<Movie>(updatedMovie, HttpStatus.CREATED), controller.update(1l, movie));
+		Assertions.assertEquals(new ResponseEntity<Movie>(updatedMovie, HttpStatus.CREATED), controller.update(1l, movie));
 		
 		Mockito.verify(service, times(1)).update(1l, movie);
 	}
@@ -80,7 +81,7 @@ public class MovieControllerUnitTest {
 
 		Mockito.when(service.delete(1l)).thenReturn(true);
 		
-		AssertEquals(new ResponseEntity<Movie>(HttpStatus.NO_CONTENT), controller.delete(1l));
+		Assertions.assertEquals(new ResponseEntity<Movie>(HttpStatus.NO_CONTENT), controller.delete(1l));
 		
 		Mockito.verify(service, times(1)).delete(1l);
 	}
@@ -99,7 +100,7 @@ public class MovieControllerUnitTest {
 		
 		Mockito.when(service.readAllByTitle("title")).thenReturn(movies);
 		
-		AssertEquals(new ResponseEntity<List<Movie>>(movies, HttpStatus.OK), controller.readAllByTitle("title"));
+		Assertions.assertEquals(new ResponseEntity<List<Movie>>(movies, HttpStatus.OK), controller.readAllByTitle("title"));
 		
 		Mockito.verify(service, times(1)).readAllByTitle("title");
 	}
@@ -120,7 +121,7 @@ public class MovieControllerUnitTest {
 		
 		Mockito.when(service.readAllByYear(1990)).thenReturn(movies);
 		
-		AssertEquals(new ResponseEntity<List<Movie>>(movies, HttpStatus.OK), controller.readAllByYear(1990));
+		Assertions.assertEquals(new ResponseEntity<List<Movie>>(movies, HttpStatus.OK), controller.readAllByYear(1990));
 		
 		Mockito.verify(service, times(1)).readAllByYear(1990);
 	}
@@ -141,7 +142,7 @@ public class MovieControllerUnitTest {
 		
 		Mockito.when(service.readAllByCast(actor1)).thenReturn(movies);
 		
-		AssertEquals(new ResponseEntity<List<Movie>>(movies, HttpStatus.OK), controller.readAllByCast(actor1));
+		Assertions.assertEquals(new ResponseEntity<List<Movie>>(movies, HttpStatus.OK), controller.readAllByCast(actor1));
 		
 		Mockito.verify(service, times(1)).readAllByCast(actor1);
 	}
