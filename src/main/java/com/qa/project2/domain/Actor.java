@@ -23,7 +23,7 @@ public class Actor {
 	private String lastName;
 	
 	@JsonIgnore
-	@ManyToMany(targetEntity=Movie.class, mappedBy = "actors")
+	@ManyToMany(targetEntity=Movie.class, mappedBy = "cast")
 	private List<Movie> movies;
 
 	public Actor() {
