@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -42,7 +43,12 @@ public class ActorController {
 	
 	@PutMapping("/update/{id}")
 	public ResponseEntity<Actor> update(@PathVariable long id, @RequestBody Actor actor){
-		return new ResponseEntity<Actor>(this.service.update(id, actor), HttpStatus.OK);
+		return new ResponseEntity<Actor>(this.service.update(id, actor), HttpStatus.ACCEPTED);
+	}
+	
+	@DeleteMapping("/delete/{id}")
+	public ResponseEntity<Actor> delete(long id){
+		return this.service.delete(id)? new ResponseEntity<Actor>(HttpStatus.NO_CONTENT):new ResponseEntity<Actor>(HttpStatus.NOT_FOUND);
 	}
 	
 	
