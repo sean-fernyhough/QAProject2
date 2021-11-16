@@ -1,5 +1,7 @@
 package com.qa.project2.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.qa.project2.domain.Movie;
@@ -18,6 +20,8 @@ public class MovieService {
 		return repo.saveAndFlush(movie);
 	}
 	
-	
+	public List<Movie> readAll() {
+		return repo.findAll();
+	}
 	
 }
