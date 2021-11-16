@@ -126,7 +126,7 @@ public class MovieControllerUnitTest {
 	}
 	
 	@Test
-	void readAllByYearTest() {
+	void readAllByCastTest() {
 		Actor actor1 = new Actor("sample", "actor1");
 		Actor actor2 = new Actor("sample", "actor2");
 		List<Actor> cast = new ArrayList<Actor>();
@@ -139,11 +139,11 @@ public class MovieControllerUnitTest {
 		movies.add(movie1);
 		movies.add(movie2);
 		
-		Mockito.when(service.readAllByYear(1990)).thenReturn(movies);
+		Mockito.when(service.readAllByCast(actor1)).thenReturn(movies);
 		
-		AssertEquals(new ResponseEntity<List<Movie>>(movies, HttpStatus.OK), controller.readAllByYear(1990));
+		AssertEquals(new ResponseEntity<List<Movie>>(movies, HttpStatus.OK), controller.readAllByCast(actor1));
 		
-		Mockito.verify(service, times(1)).readAllByYear(1990);
+		Mockito.verify(service, times(1)).readAllByCast(actor1);
 	}
 	
 }
