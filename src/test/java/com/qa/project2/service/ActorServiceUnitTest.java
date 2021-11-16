@@ -58,4 +58,17 @@ public class ActorServiceUnitTest {
 			Mockito.verify(repo, times(1)).deleteById(1l);
 			Mockito.verify(repo, times(2)).existsById(1l);
 		}
+		
+		@Test
+		void readAllTest() {
+			Actor actor1 = new Actor("sample", "actor1");
+			Actor actor2 = new Actor("sample", "actor2");
+			List<Actor> actors = new ArrayList<Actor>();
+
+			Mockito.when(repo.findAll()).thenReturn(actors);
+
+			Assertions.assertEquals(actors, service.readAll());
+			
+			Mockito.verify(repo, times(1)).findAll();
+		}
 }
