@@ -1,12 +1,12 @@
 package com.qa.project2.service;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
 import com.qa.project2.domain.Movie;
 import com.qa.project2.exceptions.MovieNotFoundException;
+import com.qa.project2.exceptions.NoMoviesFoundException;
 import com.qa.project2.repo.MovieRepo;
 
 @Service
@@ -42,5 +42,15 @@ public class MovieService {
 		repo.deleteById(id);
 		return !repo.existsById(id);
 	}
+	
+	public List<Movie> readAllByYear(int year) {
+		List<Movie> movies;
+		if((movies = repo.findAllByYear(year).get()).size() > 1) {
+			return movies;
+		}else {
+			throw new NoMoviesFoundException();
+		}
+	}
+	
 	
 }
