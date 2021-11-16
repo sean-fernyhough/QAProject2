@@ -104,4 +104,46 @@ public class MovieControllerUnitTest {
 		Mockito.verify(service, times(1)).readAllByTitle("title");
 	}
 	
+	@Test
+	void readAllByYearTest() {
+		Actor actor1 = new Actor("sample", "actor1");
+		Actor actor2 = new Actor("sample", "actor2");
+		List<Actor> cast = new ArrayList<Actor>();
+		cast.add(actor1);
+		cast.add(actor2);
+		
+		Movie movie1 = new Movie(1l, "title", "synopsis", 1990, cast, 3.7);
+		Movie movie2 = new Movie(2l, "title", "synopsis", 1990, cast, 4.8);
+		List<Movie> movies = new ArrayList<Movie>();
+		movies.add(movie1);
+		movies.add(movie2);
+		
+		Mockito.when(service.readAllByYear(1990)).thenReturn(movies);
+		
+		AssertEquals(new ResponseEntity<List<Movie>>(movies, HttpStatus.OK), controller.readAllByYear(1990));
+		
+		Mockito.verify(service, times(1)).readAllByYear(1990);
+	}
+	
+	@Test
+	void readAllByYearTest() {
+		Actor actor1 = new Actor("sample", "actor1");
+		Actor actor2 = new Actor("sample", "actor2");
+		List<Actor> cast = new ArrayList<Actor>();
+		cast.add(actor1);
+		cast.add(actor2);
+		
+		Movie movie1 = new Movie(1l, "title", "synopsis", 1990, cast, 3.7);
+		Movie movie2 = new Movie(2l, "title", "synopsis", 1990, cast, 4.8);
+		List<Movie> movies = new ArrayList<Movie>();
+		movies.add(movie1);
+		movies.add(movie2);
+		
+		Mockito.when(service.readAllByYear(1990)).thenReturn(movies);
+		
+		AssertEquals(new ResponseEntity<List<Movie>>(movies, HttpStatus.OK), controller.readAllByYear(1990));
+		
+		Mockito.verify(service, times(1)).readAllByYear(1990);
+	}
+	
 }
