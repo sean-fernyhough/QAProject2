@@ -52,5 +52,14 @@ public class MovieService {
 		}
 	}
 	
+	public List<Movie> readAllByTitle(String title) {
+		List<Movie> movies;
+		if((movies = repo.findAllByTitle(title).get()).size() > 1) {
+			return movies;
+		}else {
+			throw new NoMoviesFoundException();
+		}
+	}
+	
 	
 }
