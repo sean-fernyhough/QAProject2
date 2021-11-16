@@ -94,5 +94,26 @@ public class MovieServiceUnitTest {
 		Mockito.verify(repo, times(1)).findAll();
 	}
 
+	@Test
+	void readAllByTitleTest() {
+		Actor actor1 = new Actor("sample", "actor1");
+		Actor actor2 = new Actor("sample", "actor2");
+		List<Actor> cast = new ArrayList<Actor>();
+		cast.add(actor1);
+		cast.add(actor2);
+
+		Movie movie1 = new Movie(1l, "title", "synopsis", 1990, cast, 3.7);
+		Movie movie2 = new Movie(1l, "title", "synopsis2", 1999, cast, 4.9);
+		List<Movie> movies = new ArrayList<Movie>();
+		
+		
+		Mockito.when(repo.findAllByTitle("title")).thenReturn(movies);
+
+		Assertions.assertEquals(movies, service.readAllByTitle("title"));
+		
+		Mockito.verify(repo, times(1)).findAllByTitle();
+	}
+	
+	
 	
 }
