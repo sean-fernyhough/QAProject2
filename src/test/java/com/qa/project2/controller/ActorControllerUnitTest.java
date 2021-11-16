@@ -54,6 +54,21 @@ public class ActorControllerUnitTest {
 		Mockito.verify(service, times(1)).delete(1l);
 	}
 	
+	@Test
+	void readAllTest() {
+		Actor actor1 = new Actor("sample", "actor1");
+		Actor actor2 = new Actor("sample", "actor2");
+		List<Actor> actors = new ArrayList<Actor>();
+		cast.add(actor1);
+		cast.add(actor2);
+
+		Mockito.when(service.readAll()).thenReturn(actors);
+		
+		AssertEquals(new ResponseEntity<List<Actor>>(actors, HttpStatus.OK), controller.readAll());
+		
+		Mockito.verify(service, times(1)).readAll();
+	}
+	
 	
 	
 }
