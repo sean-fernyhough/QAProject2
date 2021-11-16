@@ -48,5 +48,14 @@ public class ActorServiceUnitTest {
 			Mockito.verify(repo, times(1)).saveAndFlush(updatedActor);
 		}
 		
-		
+		@Test
+		void deleteTest() {
+			
+			Mockito.when(repo.existsById(1l)).thenReturn(true, false);
+			
+			Assertions.assertEquals(true, service.delete(1l));
+			
+			Mockito.verify(repo, times(1)).deleteById(1l);
+			Mockito.verify(repo, times(2)).existsById(1l);
+		}
 }
