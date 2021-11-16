@@ -21,6 +21,9 @@ public class ActorService {
 		return repo.saveAndFlush(actor);
 	}
 	
-
+	public List<Actor> readAll(){
+		return repo.findAll();
+	}
+	
 	
 }
