@@ -85,4 +85,23 @@ public class MovieControllerUnitTest {
 		Mockito.verify(service, times(1)).delete(1l);
 	}
 	
+	@Test
+	void readAllByTitleTest() {
+		Actor actor1 = new Actor("sample", "actor1");
+		Actor actor2 = new Actor("sample", "actor2");
+		List<Actor> cast = new ArrayList<Actor>();
+		cast.add(actor1);
+		cast.add(actor2);
+		
+		Movie movie = new Movie(1l, "title", "synopsis", 1990, cast, 3.7);
+		List<Movie> movies = new ArrayList<Movie>();
+		movies.add(movie);
+		
+		Mockito.when(service.readAllByTitle("title")).thenReturn(movies);
+		
+		AssertEquals(new ResponseEntity<List<Movie>>(movies, HttpStatus.OK), controller.readAllByTitle("title"));
+		
+		Mockito.verify(service, times(1)).readAllByTitle("title");
+	}
+	
 }
