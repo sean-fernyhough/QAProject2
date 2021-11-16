@@ -41,6 +41,11 @@ public class MovieController {
 		return new ResponseEntity<List<Movie>>(service.readAll(), HttpStatus.OK);
 	}
 	
+	@GetMapping("/update/get/title/{title}")
+	public ResponseEntity<List<Movie>> readAllNyTitle(@PathVariable String title){
+		return new ResponseEntity<List<Movie>>(service.readAllByTitle(title), HttpStatus.OK);
+	}
+	
 	@DeleteMapping("/update/delete/{id}")
 	public ResponseEntity<Movie> delete(@PathVariable long id){
 		return service.delete(id)? new ResponseEntity<Movie>(HttpStatus.NO_CONTENT):new ResponseEntity<Movie>(HttpStatus.NOT_FOUND);
