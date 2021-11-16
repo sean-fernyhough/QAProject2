@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import com.qa.project2.domain.Actor;
 import com.qa.project2.exceptions.ActorNotFoundException;
-import com.qa.project2.exceptions.MovieNotFoundException;
 import com.qa.project2.repo.ActorRepo;
 
 @Service
@@ -24,6 +23,10 @@ public class ActorService {
 	
 	public List<Actor> readAll(){
 		return repo.findAll();
+	}
+	
+	public List<Actor> readByName(String name){
+		return repo.findAllByName(name).orElseThrow(ActorNotFoundException::new);
 	}
 	
 	public Actor update(long id, Actor actor) {
