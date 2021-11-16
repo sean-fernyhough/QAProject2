@@ -6,12 +6,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import nl.jqno.equalsverifier.EqualsVerifier;
 
 @SpringBootTest
-public class MovieTest {
+public class ActorTest {
 
 	@Test
-	void MovieEqualsTest() {
+	void ActorEqualsTest() {
 
-		EqualsVerifier.simple().forClass(Movie.class).verify();
+		EqualsVerifier.simple().forClass(Actor.class).verify();
 	}
-
 }
