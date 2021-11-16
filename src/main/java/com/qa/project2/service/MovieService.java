@@ -24,4 +24,16 @@ public class MovieService {
 		return repo.findAll();
 	}
 	
+	public Movie update(long id, Movie movie) {
+		Movie existing = repo.findById(id).get();
+		existing.setTitle(movie.getTitle());
+		existing.setSynopsis(movie.getSynopsis());
+		existing.setRating(movie.getRating());
+		existing.setRuntime(movie.getRuntime());
+		existing.setYear(movie.getYear());
+		existing.setCast(movie.getCast());
+		return repo.saveAndFlush(existing);
+	}
+	
+	
 }
