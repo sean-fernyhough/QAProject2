@@ -16,18 +16,32 @@ public class ActorControllerUnitTest {
 
 	@Autowired
 	ActorController controller;
-	
+
 	@MockBean
 	private ActorService service;
-	
+
 	@Test
 	void createTest() {
 		Actor actor = new Actor("sample", "actor1");
+		Actor createdActor = new Actor(1l, "sample", "actor1");
+
+		Mockito.when(service.create(actor)).thenReturn(createdActor);
+
+		AssertEquals(new ResponseEntity<Actor>(createdActor, HttpStatus.CREATED), controller.create(actor));
+
+		Mockito.verify(service, times(1)).create(actor);
+	}
+
+	@Test
+	void deleteTest() {
+
+		Mockito.when(service.delete(1l)).thenReturn(true);
 		
-		Mockito.when(service.create(actor)).thenReturn(actor);
+		AssertEquals(new ResponseEntity<Actor>(HttpStatus.NO_CONTENT), controller.delete(1l));
 		
-		AssertEquals(new ResponseEntity<Movie>(createdMovie, HttpStatus.CREATED), controller.create(movie));
-		
-		Mockito.verify(service, times(1)).create(movie);
+		Mockito.verify(service, times(1)).delete(1l);
+	}
+	
+	
 	
 }
