@@ -2,7 +2,9 @@ package com.qa.project2.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,4 +26,10 @@ public class MovieController {
 	public ResponseEntity<Movie> create(@RequestBody Movie movie){
 		return new ResponseEntity<Movie>(service.create(movie), HttpStatus.CREATED);
 	}
+	
+	@PutMapping("/update/{id}")
+	public ResponseEntity<Movie> create(@PathVariable long id, @RequestBody Movie movie){
+		return new ResponseEntity<Movie>(service.update(id, movie), HttpStatus.ACCEPTED);
+	}
+	
 }
