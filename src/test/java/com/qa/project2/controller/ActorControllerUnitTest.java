@@ -33,6 +33,18 @@ public class ActorControllerUnitTest {
 	}
 
 	@Test
+	void updateTest() {
+		Actor actor = new Actor("sample", "actor");
+		Actor updatedActor = new Actor(1l, "sample", "actor");
+		
+		Mockito.when(service.update(1l, actor)).thenReturn(updatedActor);
+		
+		AssertEquals(new ResponseEntity<Actor>(updatedActor, HttpStatus.ACCEPTED), controller.update(1l, actor));
+		
+		Mockito.verify(service, times(1)).update(1l, actor);
+	}
+	
+	@Test
 	void deleteTest() {
 
 		Mockito.when(service.delete(1l)).thenReturn(true);
