@@ -33,4 +33,20 @@ public class ActorServiceUnitTest {
 			
 			Mockito.verify(repo, times(1)).saveAndFlush(actor);
 	}
+		
+		@Test
+		void updateTest() {
+			Actor actor = new Actor(1l, "sample", "actor");
+			Actor updatedActor = new Actor(1l, "updated sample", "actor");
+			
+			Mockito.when(repo.findById(1l).get()).thenReturn(actor);
+			Mockito.when(repo.saveAndFlush(updatedActor)).thenReturn(updatedActor);
+			
+			Assertions.assertEquals(updatedActor, service.update(1l, updatedActor));
+			
+			Mockito.verify(repo, times(1)).findById(1l);
+			Mockito.verify(repo, times(1)).saveAndFlush(updatedActor);
+		}
+		
+		
 }
