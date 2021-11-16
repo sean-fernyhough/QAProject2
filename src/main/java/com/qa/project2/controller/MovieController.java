@@ -1,7 +1,10 @@
 package com.qa.project2.controller;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -28,8 +31,14 @@ public class MovieController {
 	}
 	
 	@PutMapping("/update/{id}")
-	public ResponseEntity<Movie> create(@PathVariable long id, @RequestBody Movie movie){
+	public ResponseEntity<Movie> update(@PathVariable long id, @RequestBody Movie movie){
 		return new ResponseEntity<Movie>(service.update(id, movie), HttpStatus.ACCEPTED);
 	}
+	
+	@GetMapping("/update/get")
+	public ResponseEntity<List<Movie>> readAll(){
+		return new ResponseEntity<List<Movie>>(service.readAll(), HttpStatus.OK);
+	}
+	
 	
 }
