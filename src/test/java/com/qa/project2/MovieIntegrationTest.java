@@ -2,6 +2,7 @@ package com.qa.project2;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -164,6 +165,30 @@ public class MovieIntegrationTest {
 		ResultMatcher checkStatus = status().is(200);
 		
 		ResultMatcher checkBody = content().json(movieJson);
+		
+		this.mvc.perform(request).andExpect(checkStatus).andExpect(checkBody);
+	}
+	
+	@Test
+	public void updateTest() throws Exception {
+		Actor actor1 = new Actor(1l, "steven", "seagull", null);
+		Actor actor2 = new Actor(2l, "van", "diesel", null);
+		List<Actor> cast = new ArrayList<Actor>();
+		cast.add(actor1);
+		cast.add(actor2);
+		
+		Movie movie = new Movie("a new movie", 2001, 125,  cast, "movie synopsis", 2.1);
+		
+		String movieJson = mapper.writeValueAsString(movie);
+		
+		RequestBuilder request = put("/movies/update/1").contentType(MediaType.APPLICATION_JSON).content(movieJson);
+		
+		ResultMatcher checkStatus = status().is(202);
+		
+		Movie createdMovie = new Movie(1l, "a new movie", 2001, 125,  cast, "movie synopsis", 2.1);
+		String createdMovieJson = mapper.writeValueAsString(createdMovie);
+		
+		ResultMatcher checkBody = content().json(createdMovieJson);
 		
 		this.mvc.perform(request).andExpect(checkStatus).andExpect(checkBody);
 	}
