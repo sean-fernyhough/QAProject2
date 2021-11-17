@@ -2,6 +2,7 @@ package com.qa.project2;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -101,6 +102,24 @@ public class ActorIntegrationTest {
 		
 		this.mvc.perform(request).andExpect(checkStatus).andExpect(checkBody);
 	}
+	
+	@Test
+	public void updateTest() throws Exception {
+		Actor actor = new Actor("milly", "seagull", null);				
+		String actorJson = mapper.writeValueAsString(actor);
+		
+		RequestBuilder request = put("/actors/update/1").contentType(MediaType.APPLICATION_JSON).content(actorJson);
+		
+		ResultMatcher checkStatus = status().is(202);
+		
+		Actor actorUpdated = new Actor(1l, "milly", "seagull", null);		
+		String actorUpdatedJson = mapper.writeValueAsString(actorUpdated);
+		
+		ResultMatcher checkBody = content().json(actorUpdatedJson);
+		
+		this.mvc.perform(request).andExpect(checkStatus).andExpect(checkBody);
+	}
+
 
 	
 }
