@@ -1,5 +1,6 @@
 package com.qa.project2;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
@@ -191,6 +192,15 @@ public class MovieIntegrationTest {
 		ResultMatcher checkBody = content().json(createdMovieJson);
 		
 		this.mvc.perform(request).andExpect(checkStatus).andExpect(checkBody);
+	}
+	
+	@Test
+	public void deleteTest() throws Exception {
+		RequestBuilder request = delete("/movies/delete/2").contentType(MediaType.APPLICATION_JSON);		
+
+		ResultMatcher checkStatus = status().is(204);
+	
+		this.mvc.perform(request).andExpect(checkStatus);
 	}
 
 }
