@@ -81,7 +81,7 @@ public class Actor {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(id, lastName, movies);
+		return Objects.hash(firstName, lastName, movies);
 	}
 
 	@Override
@@ -93,8 +93,10 @@ public class Actor {
 		if (getClass() != obj.getClass())
 			return false;
 		Actor other = (Actor) obj;
-		return id == other.id && Objects.equals(lastName, other.lastName) && Objects.equals(movies, other.movies);
+		return Objects.equals(firstName, other.firstName) && Objects.equals(lastName, other.lastName)
+				&& Objects.equals(movies, other.movies);
 	}
+
 	
 	
 	
