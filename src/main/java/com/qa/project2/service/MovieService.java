@@ -13,19 +13,19 @@ import com.qa.project2.repo.MovieRepo;
 public class MovieService {
 
 	private MovieRepo repo;
-	
+
 	MovieService(MovieRepo repo) {
 		this.repo = repo;
 	}
-	
+
 	public Movie create(Movie movie) {
 		return repo.saveAndFlush(movie);
 	}
-	
+
 	public List<Movie> readAll() {
 		return repo.findAll();
 	}
-	
+
 	public Movie update(long id, Movie movie) {
 		Movie existing = repo.findById(id).orElseThrow(MovieNotFoundException::new);
 		existing.setTitle(movie.getTitle());
@@ -36,38 +36,32 @@ public class MovieService {
 		existing.setCast(movie.getCast());
 		return repo.saveAndFlush(existing);
 	}
-	
+
 	public boolean delete(long id) {
-		if (!repo.existsById(id)){throw new MovieNotFoundException();};
+		if (!repo.existsById(id)) {
+			throw new MovieNotFoundException();
+		}
+		;
 		repo.deleteById(id);
 		return !repo.existsById(id);
 	}
-	
+
 	public List<Movie> readAllByYear(int year) {
 		List<Movie> movies;
-		if((movies = repo.findAllByYear(year).get()).size() > 1) {
-			return movies;
-		}else {
-			throw new NoMoviesFoundException();
-		}
+		if ((movies = repo.findAllByYear(year)).size() < 1) {throw new NoMoviesFoundException();};
+		return movies;
 	}
-	
+
 	public List<Movie> readAllByTitle(String title) {
 		List<Movie> movies;
-		if((movies = repo.findAllByTitle(title).get()).size() > 1) {
-			return movies;
-		}else {
-			throw new NoMoviesFoundException();
-		}
+		if ((movies = repo.findAllByTitle(title)).size() < 1) {throw new NoMoviesFoundException();};
+		return movies;
 	}
-	
+
 	public List<Movie> readAllByCast(String name) {
 		List<Movie> movies;
-		if((movies = repo.findAllByName(name).get()).size() > 1) {
-			return movies;
-		}else {
-			throw new NoMoviesFoundException();
-		}
+		if ((movies = repo.findAllByName(name)).size() < 1) {throw new NoMoviesFoundException();};
+		return movies;
 	}
 
 }

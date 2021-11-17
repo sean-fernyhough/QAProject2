@@ -26,7 +26,7 @@ public class ActorService {
 	}
 	
 	public List<Actor> readByName(String name){
-		return repo.findAllByName(name).orElseThrow(ActorNotFoundException::new);
+		return repo.findAllByName(name);
 	}
 	
 	public Actor update(long id, Actor actor) {
