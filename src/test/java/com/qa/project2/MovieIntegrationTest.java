@@ -141,5 +141,31 @@ public class MovieIntegrationTest {
 		
 		this.mvc.perform(request).andExpect(checkStatus).andExpect(checkBody);
 	}
+	
+	@Test
+	public void readAllByCastTest() throws Exception {
+		Actor actor1 = new Actor(1l, "steven", "seagull", null);
+		Actor actor2 = new Actor(2l, "van", "diesel", null);
+		Actor actor3 = new Actor(3l, "bruce", "willyoueverstopmakingbadmovies", null);
+		List<Actor> cast1 = new ArrayList<Actor>();
+		cast1.add(actor1);
+		cast1.add(actor2);
+		
+		List<Movie> movies = new ArrayList<Movie>();
+		Movie movie1 = new Movie(1l, "bad movie", 2003, 93,  cast1, "this movie is bad", 2.7);
+
+		movies.add(movie1);
+		
+		String movieJson = mapper.writeValueAsString(movies);
+		String search = "van";
+		
+		RequestBuilder request = get("/movies/get/cast/" + search).contentType(MediaType.APPLICATION_JSON);
+		
+		ResultMatcher checkStatus = status().is(200);
+		
+		ResultMatcher checkBody = content().json(movieJson);
+		
+		this.mvc.perform(request).andExpect(checkStatus).andExpect(checkBody);
+	}
 
 }
