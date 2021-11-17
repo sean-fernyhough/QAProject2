@@ -115,13 +115,13 @@ public class Movie {
 
 	@Override
 	public String toString() {
-		return "Movie [id=" + id + ", title=" + title + ", year=" + year + ", runtime=" + runtime + ", synopsis="
-				+ synopsis + ", rating=" + rating + "]";
+		return "Movie [id=" + id + ", title=" + title + ", year=" + year + ", runtime=" + runtime + ", cast=" + cast
+				+ ", synopsis=" + synopsis + ", rating=" + rating + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(rating, runtime, synopsis, title, year);
+		return Objects.hash(cast, rating, runtime, synopsis, title, year);
 	}
 
 	@Override
@@ -133,10 +133,12 @@ public class Movie {
 		if (getClass() != obj.getClass())
 			return false;
 		Movie other = (Movie) obj;
-		return Double.doubleToLongBits(rating) == Double.doubleToLongBits(other.rating) && runtime == other.runtime
+		return Objects.equals(cast, other.cast)
+				&& Double.doubleToLongBits(rating) == Double.doubleToLongBits(other.rating) && runtime == other.runtime
 				&& Objects.equals(synopsis, other.synopsis) && Objects.equals(title, other.title) && year == other.year;
 	}
-	
+
+
 	
 	
 	

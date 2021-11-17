@@ -36,28 +36,28 @@ public class MovieController {
 		return new ResponseEntity<Movie>(service.update(id, movie), HttpStatus.ACCEPTED);
 	}
 	
-	@GetMapping("/update/get")
+	@GetMapping("/get")
 	public ResponseEntity<List<Movie>> readAll(){
 		return new ResponseEntity<List<Movie>>(service.readAll(), HttpStatus.OK);
 	}
 	
-	@GetMapping("/update/get/title/{title}")
+	@GetMapping("/get/title/{title}")
 	public ResponseEntity<List<Movie>> readAllByTitle(@PathVariable String title){
 		return new ResponseEntity<List<Movie>>(service.readAllByTitle(title), HttpStatus.OK);
 	}
 	
-	@GetMapping("/update/get/cast/{name}")
+	@GetMapping("/get/cast/{cast}")
 	public ResponseEntity<List<Movie>> readAllByCast(@PathVariable String cast){
 		return new ResponseEntity<List<Movie>>(service.readAllByCast(cast), HttpStatus.OK);
 	}
 	
-	@GetMapping("/update/get/year/{year}")
-	public ResponseEntity<List<Movie>> readAllByCast(@PathVariable int year){
+	@GetMapping("/get/year/{year}")
+	public ResponseEntity<List<Movie>> readAllByYear(@PathVariable int year){
 		return new ResponseEntity<List<Movie>>(service.readAllByYear(year), HttpStatus.OK);
 	}
 	
 	
-	@DeleteMapping("/update/delete/{id}")
+	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<Movie> delete(@PathVariable long id){
 		return service.delete(id)? new ResponseEntity<Movie>(HttpStatus.NO_CONTENT):new ResponseEntity<Movie>(HttpStatus.NOT_FOUND);
 	}
