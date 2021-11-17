@@ -1,5 +1,6 @@
 package com.qa.project2;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -61,5 +62,45 @@ public class ActorIntegrationTest {
 		
 		this.mvc.perform(request).andExpect(checkStatus).andExpect(checkBody);
 	}
+	
+	@Test
+	public void readAllTest() throws Exception {
+		Actor actor1 = new Actor(1l, "steven", "seagull", null);
+		Actor actor2 = new Actor(2l, "van", "diesel", null);
+		Actor actor3 = new Actor(3l, "bruce", "willyoueverstopmakingbadmovies", null);
+		List<Actor> actors = new ArrayList<Actor>();
+		actors.add(actor1);
+		actors.add(actor2);
+		actors.add(actor3);
+		
+		String actorJson = mapper.writeValueAsString(actors);
+		
+		RequestBuilder request = get("/actors/get").contentType(MediaType.APPLICATION_JSON);
+		
+		ResultMatcher checkStatus = status().is(200);
+		
+		ResultMatcher checkBody = content().json(actorJson);
+		
+		this.mvc.perform(request).andExpect(checkStatus).andExpect(checkBody);
+	}
+	
+	@Test
+	public void readAllByNameTest() throws Exception {
+		Actor actor2 = new Actor(2l, "van", "diesel", null);
+		List<Actor> actors = new ArrayList<Actor>();
+		actors.add(actor2);
+
+		String actorJson = mapper.writeValueAsString(actors);
+		String search = "van";
+		
+		RequestBuilder request = get("/actors/get/" + search).contentType(MediaType.APPLICATION_JSON);
+		
+		ResultMatcher checkStatus = status().is(200);
+		
+		ResultMatcher checkBody = content().json(actorJson);
+		
+		this.mvc.perform(request).andExpect(checkStatus).andExpect(checkBody);
+	}
+
 	
 }
