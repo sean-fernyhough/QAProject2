@@ -11,7 +11,7 @@ public class MovieTest {
 	@Test
 	void MovieEqualsTest() {
 
-		EqualsVerifier.simple().forClass(Movie.class).verify();
+		EqualsVerifier.simple().forClass(Movie.class).withPrefabValues(Actor.class, new Actor("sam", "johnson", null), new Actor("timothy", "johnson", null)).verify();
 	}
 
 }

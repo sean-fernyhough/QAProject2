@@ -14,6 +14,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
+import com.qa.project2.domain.Actor;
+import com.qa.project2.domain.Movie;
+import com.qa.project2.service.MovieService;
+
 @SpringBootTest
 public class MovieControllerUnitTest {
 
@@ -25,13 +29,13 @@ public class MovieControllerUnitTest {
 	
 	@Test
 	void createTest() {
-		Actor actor1 = new Actor("sample", "actor1");
-		Actor actor2 = new Actor("sample", "actor2");
+		Actor actor1 = new Actor("sample", "actor1", null);
+		Actor actor2 = new Actor("sample", "actor2", null);
 		List<Actor> cast = new ArrayList<Actor>();
 		cast.add(actor1);
 		cast.add(actor2);
-		Movie movie = new Movie("title", "synopsis", 1990, cast, 3.7);
-		Movie createdMovie = new Movie(1l, "title", "synopsis", 1990, cast, 3.7);
+		Movie movie = new Movie("title", 1990, 120, cast, "synopsis", 3.7);
+		Movie createdMovie = new Movie(1l, "title", 1990, 120, cast, "synopsis", 3.7);
 		Mockito.when(service.create(movie)).thenReturn(createdMovie);
 		
 		Assertions.assertEquals(new ResponseEntity<Movie>(createdMovie, HttpStatus.CREATED), controller.create(movie));
@@ -41,14 +45,14 @@ public class MovieControllerUnitTest {
 	
 	@Test
 	void readAllTest() {
-		Actor actor1 = new Actor("sample", "actor1");
-		Actor actor2 = new Actor("sample", "actor2");
+		Actor actor1 = new Actor("sample", "actor1", null);
+		Actor actor2 = new Actor("sample", "actor2", null);
 		List<Actor> cast = new ArrayList<Actor>();
 		cast.add(actor1);
 		cast.add(actor2);
 		
-		Movie movie1 = new Movie(1l, "title", "synopsis", 1990, cast, 3.7);
-		Movie movie2 = new Movie(2l, "title", "synopsis", 2002, cast, 4.8);
+		Movie movie1 = new Movie(1l, "title", 1990, 120, cast, "synopsis", 3.7);
+		Movie movie2 = new Movie(2l, "title", 2002, 93, cast, "synopsis", 4.8);
 		List<Movie> movies = new ArrayList<Movie>();
 		movies.add(movie1);
 		movies.add(movie2);
@@ -62,16 +66,16 @@ public class MovieControllerUnitTest {
 	
 	@Test
 	void updateTest() {
-		Actor actor1 = new Actor("sample", "actor1");
-		Actor actor2 = new Actor("sample", "actor2");
+		Actor actor1 = new Actor("sample", "actor1", null);
+		Actor actor2 = new Actor("sample", "actor2", null);
 		List<Actor> cast = new ArrayList<Actor>();
 		cast.add(actor1);
 		cast.add(actor2);
-		Movie movie = new Movie("title", "synopsis", 1990, cast, 3.7);
-		Movie updatedMovie = new Movie(1l, "updated", "movie", 1990, cast, 3.7);
+		Movie movie = new Movie("title", 1990, 120, cast, "synopsis", 3.7);
+		Movie updatedMovie = new Movie(1l, "updated", 1990, 120, cast, "movie", 3.7);
 		Mockito.when(service.update(1l, movie)).thenReturn(updatedMovie);
 		
-		Assertions.assertEquals(new ResponseEntity<Movie>(updatedMovie, HttpStatus.CREATED), controller.update(1l, movie));
+		Assertions.assertEquals(new ResponseEntity<Movie>(updatedMovie, HttpStatus.ACCEPTED), controller.update(1l, movie));
 		
 		Mockito.verify(service, times(1)).update(1l, movie);
 	}
@@ -88,13 +92,13 @@ public class MovieControllerUnitTest {
 	
 	@Test
 	void readAllByTitleTest() {
-		Actor actor1 = new Actor("sample", "actor1");
-		Actor actor2 = new Actor("sample", "actor2");
+		Actor actor1 = new Actor("sample", "actor1", null);
+		Actor actor2 = new Actor("sample", "actor2", null);
 		List<Actor> cast = new ArrayList<Actor>();
 		cast.add(actor1);
 		cast.add(actor2);
 		
-		Movie movie = new Movie(1l, "title", "synopsis", 1990, cast, 3.7);
+		Movie movie = new Movie(1l, "title", 1990, 120, cast, "synopsis", 3.7);
 		List<Movie> movies = new ArrayList<Movie>();
 		movies.add(movie);
 		
@@ -107,14 +111,14 @@ public class MovieControllerUnitTest {
 	
 	@Test
 	void readAllByYearTest() {
-		Actor actor1 = new Actor("sample", "actor1");
-		Actor actor2 = new Actor("sample", "actor2");
+		Actor actor1 = new Actor("sample", "actor1", null);
+		Actor actor2 = new Actor("sample", "actor2", null);
 		List<Actor> cast = new ArrayList<Actor>();
 		cast.add(actor1);
 		cast.add(actor2);
 		
-		Movie movie1 = new Movie(1l, "title", "synopsis", 1990, cast, 3.7);
-		Movie movie2 = new Movie(2l, "title", "synopsis", 1990, cast, 4.8);
+		Movie movie1 = new Movie(1l, "title", 1990, 120, cast, "synopsis", 3.7);
+		Movie movie2 = new Movie(2l, "title2", 1990, 120, cast, "synopsis", 4.8);
 		List<Movie> movies = new ArrayList<Movie>();
 		movies.add(movie1);
 		movies.add(movie2);
@@ -128,23 +132,23 @@ public class MovieControllerUnitTest {
 	
 	@Test
 	void readAllByCastTest() {
-		Actor actor1 = new Actor("sample", "actor1");
-		Actor actor2 = new Actor("sample", "actor2");
+		Actor actor1 = new Actor("sample", "actor1", null);
+		Actor actor2 = new Actor("sample", "actor2", null);
 		List<Actor> cast = new ArrayList<Actor>();
 		cast.add(actor1);
 		cast.add(actor2);
 		
-		Movie movie1 = new Movie(1l, "title", "synopsis", 1990, cast, 3.7);
-		Movie movie2 = new Movie(2l, "title", "synopsis", 1990, cast, 4.8);
+		Movie movie1 = new Movie(1l, "title", 1990, 120, cast, "synopsis", 3.7);
+		Movie movie2 = new Movie(2l, "title", 1990, 120, cast, "synopsis", 4.8);
 		List<Movie> movies = new ArrayList<Movie>();
 		movies.add(movie1);
 		movies.add(movie2);
 		
-		Mockito.when(service.readAllByCast(actor1)).thenReturn(movies);
+		Mockito.when(service.readAllByCast(actor1.getFirstName() + " " +actor1.getLastName())).thenReturn(movies);
 		
-		Assertions.assertEquals(new ResponseEntity<List<Movie>>(movies, HttpStatus.OK), controller.readAllByCast(actor1));
+		Assertions.assertEquals(new ResponseEntity<List<Movie>>(movies, HttpStatus.OK), controller.readAllByCast(actor1.getFirstName() + " " +actor1.getLastName()));
 		
-		Mockito.verify(service, times(1)).readAllByCast(actor1);
+		Mockito.verify(service, times(1)).readAllByCast(actor1.getFirstName() + " " +actor1.getLastName());
 	}
 	
 }

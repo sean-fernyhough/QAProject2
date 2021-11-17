@@ -4,6 +4,7 @@ import static org.mockito.Mockito.times;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -12,8 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-import com.qa.project2.controller.Actor;
-import com.qa.project2.controller.Movie;
+import com.qa.project2.domain.Actor;
+import com.qa.project2.domain.Movie;
+import com.qa.project2.repo.MovieRepo;
 
 @SpringBootTest
 public class MovieServiceUnitTest {
@@ -26,14 +28,14 @@ public class MovieServiceUnitTest {
 
 	@Test
 	void createTest() {
-		Actor actor1 = new Actor("sample", "actor1");
-		Actor actor2 = new Actor("sample", "actor2");
+		Actor actor1 = new Actor("sample", "actor1", null);
+		Actor actor2 = new Actor("sample", "actor2", null);
 		List<Actor> cast = new ArrayList<Actor>();
 		cast.add(actor1);
 		cast.add(actor2);
 
-		Movie movie = new Movie("title", "synopsis", 1990, cast, 3.7);
-		Movie createdMovie = new Movie(1l, "title", "synopsis", 1990, cast, 3.7);
+		Movie movie = new Movie("title", 1990, 120, cast, "synopsis", 3.7);
+		Movie createdMovie = new Movie(1l, "title", 1990, 120, cast, "synopsis", 3.7);
 		
 		Mockito.when(repo.saveAndFlush(movie)).thenReturn(createdMovie);
 		
@@ -45,21 +47,21 @@ public class MovieServiceUnitTest {
 	
 	@Test
 	void updateTest() {
-		Actor actor1 = new Actor("sample", "actor1");
-		Actor actor2 = new Actor("sample", "actor2");
+		Actor actor1 = new Actor("sample", "actor1", null);
+		Actor actor2 = new Actor("sample", "actor2", null);
 		List<Actor> cast = new ArrayList<Actor>();
 		cast.add(actor1);
 		cast.add(actor2);
 
-		Movie movie = new Movie(1l, "title", "synopsis", 1990, cast, 3.7);
-		Movie updatedMovie = new Movie(1l, "updatedTitle", "synopsis", 1990, cast, 3.7);
+		Movie movie = new Movie("title", 1990, 120, cast, "synopsis", 3.7);
+		Movie updatedMovie = new Movie(1l, "updatedTitle", 1990, 120, cast, "synopsis", 3.7);
 		
-		Mockito.when(repo.findById(1l).get()).thenReturn(movie);
+		Mockito.when(repo.findById(1l)).thenReturn(Optional.of(movie));
 		Mockito.when(repo.saveAndFlush(updatedMovie)).thenReturn(updatedMovie);
 		
 		Assertions.assertEquals(updatedMovie, service.update(1l, updatedMovie));
 		
-		Mockito.verify(repo, times(1)).findById(1);
+		Mockito.verify(repo, times(1)).findById(1l);
 		Mockito.verify(repo, times(1)).saveAndFlush(movie);
 	}
 	
@@ -76,16 +78,17 @@ public class MovieServiceUnitTest {
 	
 	@Test
 	void readAllTest() {
-		Actor actor1 = new Actor("sample", "actor1");
-		Actor actor2 = new Actor("sample", "actor2");
+		Actor actor1 = new Actor("sample", "actor1", null);
+		Actor actor2 = new Actor("sample", "actor2", null);
 		List<Actor> cast = new ArrayList<Actor>();
 		cast.add(actor1);
 		cast.add(actor2);
 
-		Movie movie1 = new Movie(1l, "title", "synopsis", 1990, cast, 3.7);
-		Movie movie2 = new Movie(1l, "title2", "synopsis2", 1999, cast, 4.9);
+		Movie movie1 = new Movie(1l, "title", 1990, 120, cast, "synopsis", 3.7);
+		Movie movie2 = new Movie(2l,"title2", 1999, 120, cast, "synopsis", 4.8);
 		List<Movie> movies = new ArrayList<Movie>();
-		
+		movies.add(movie1);
+		movies.add(movie2);
 		
 		Mockito.when(repo.findAll()).thenReturn(movies);
 
@@ -96,62 +99,65 @@ public class MovieServiceUnitTest {
 
 	@Test
 	void readAllByTitleTest() {
-		Actor actor1 = new Actor("sample", "actor1");
-		Actor actor2 = new Actor("sample", "actor2");
+		Actor actor1 = new Actor("sample", "actor1", null);
+		Actor actor2 = new Actor("sample", "actor2", null);
 		List<Actor> cast = new ArrayList<Actor>();
 		cast.add(actor1);
 		cast.add(actor2);
 
-		Movie movie1 = new Movie(1l, "title", "synopsis", 1990, cast, 3.7);
-		Movie movie2 = new Movie(1l, "title", "synopsis2", 1999, cast, 4.9);
+		Movie movie1 = new Movie(1l, "title", 1990, 120, cast, "synopsis", 3.7);
+		Movie movie2 = new Movie(2l, "title", 1999, 120, cast, "synopsis2", 4.8);
 		List<Movie> movies = new ArrayList<Movie>();
-		
+		movies.add(movie1);
+		movies.add(movie2);
 		
 		Mockito.when(repo.findAllByTitle("title")).thenReturn(movies);
 
 		Assertions.assertEquals(movies, service.readAllByTitle("title"));
 		
-		Mockito.verify(repo, times(1)).findAllByTitle();
+		Mockito.verify(repo, times(1)).findAllByTitle("title");
 	}
 	
 	@Test
 	void readAllByYearTest() {
-		Actor actor1 = new Actor("sample", "actor1");
-		Actor actor2 = new Actor("sample", "actor2");
+		Actor actor1 = new Actor("sample", "actor1", null);
+		Actor actor2 = new Actor("sample", "actor2", null);
 		List<Actor> cast = new ArrayList<Actor>();
 		cast.add(actor1);
 		cast.add(actor2);
 
-		Movie movie1 = new Movie(1l, "title", "synopsis", 1990, cast, 3.7);
-		Movie movie2 = new Movie(1l, "title2", "synopsis2", 1990, cast, 4.9);
+		Movie movie1 = new Movie(1l, "title", 1990, 120, cast, "synopsis", 3.7);
+		Movie movie2 = new Movie(2l, "title2", 1990, 120, cast, "synopsis2", 4.8);
 		List<Movie> movies = new ArrayList<Movie>();
-		
+		movies.add(movie1);
+		movies.add(movie2);
 		
 		Mockito.when(repo.findAllByYear(1990)).thenReturn(movies);
 
-		Assertions.assertEquals(movies, service.readAllByTitle(1990));
+		Assertions.assertEquals(movies, service.readAllByYear(1990));
 		
-		Mockito.verify(repo, times(1)).findAllByYear();
+		Mockito.verify(repo, times(1)).findAllByYear(1990);
 	}
 	
 	@Test
 	void readAllByCastTest() {
-		Actor actor1 = new Actor("sample", "actor1");
-		Actor actor2 = new Actor("sample", "actor2");
+		Actor actor1 = new Actor("sample", "actor1", null);
+		Actor actor2 = new Actor("sample", "actor2", null);
 		List<Actor> cast = new ArrayList<Actor>();
 		cast.add(actor1);
 		cast.add(actor2);
 
-		Movie movie1 = new Movie(1l, "title", "synopsis", 1990, cast, 3.7);
-		Movie movie2 = new Movie(1l, "title2", "synopsis2", 1990, cast, 4.9);
+		Movie movie1 = new Movie(1l, "title", 1990, 120, cast, "synopsis", 3.7);
+		Movie movie2 = new Movie(2l, "title2", 1999, 120, cast, "synopsis2", 4.8);
 		List<Movie> movies = new ArrayList<Movie>();
+		movies.add(movie1);
+		movies.add(movie2);
 		
-		
-		Mockito.when(repo.findAllByCast("sample actor1")).thenReturn(movies);
+		Mockito.when(repo.findAllByName("sample actor1")).thenReturn(movies);
 
 		Assertions.assertEquals(movies, service.readAllByCast("sample actor1"));
 		
-		Mockito.verify(repo, times(1)).findAllByCast("sample actor1");
+		Mockito.verify(repo, times(1)).findAllByName("sample actor1");
 	}
 	
 }
