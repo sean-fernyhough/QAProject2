@@ -1,3 +1,13 @@
+DROP TABLE IF EXISTS `MOVIE_CAST`;
+
+CREATE TABLE `MOVIE_CAST`
+(
+`id` BIGINT auto_increment,
+`movies_id` BIGINT NOT NULL,
+`cast_id` BIGINT NOT NULL,
+PRIMARY KEY(id)
+);
+
 DROP TABLE IF EXISTS `MOVIE`;
 
 CREATE TABLE `MOVIE`
@@ -9,7 +19,7 @@ CREATE TABLE `MOVIE`
 `rating` DECIMAL(2,1),
 `runtime` INT,
 PRIMARY KEY(id)
-)
+);
 
 DROP TABLE IF EXISTS `ACTOR`;
 
@@ -19,14 +29,5 @@ CREATE TABLE `ACTOR`
 `first_name` varchar(255) NOT NULL,
 `last_name` varchar(255) NOT NULL,
 PRIMARY KEY(id)
-)
+);
 
-DROP TABLE IF EXISTS `MOVIE_CAST`;
-
-CREATE TABLE `MOVIE_CAST`
-(
-`id` BIGINT auto_increment,
-`movie_id` BIGINT NOT NULL,
-`cast_id` BIGINT NOT NULL,
-PRIMARY KEY(id)
-)
