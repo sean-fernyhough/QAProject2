@@ -4,6 +4,7 @@ import static org.mockito.Mockito.times;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,9 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+
+import com.qa.project2.domain.Actor;
+import com.qa.project2.repo.ActorRepo;
 
 @SpringBootTest
 public class ActorServiceUnitTest {
@@ -21,10 +25,9 @@ public class ActorServiceUnitTest {
 	ActorService service;
 	
 	@Test
-	void createTest() {
 		void createTest() {
-			Actor actor = new Actor("sample", "actor");
-			Actor createdActor = new Actor(1l, "sample", "actor");
+			Actor actor = new Actor("sample", "actor", null);
+			Actor createdActor = new Actor(1l, "sample", "actor", null);
 			
 			Mockito.when(repo.saveAndFlush(actor)).thenReturn(createdActor);
 			
@@ -36,10 +39,10 @@ public class ActorServiceUnitTest {
 		
 		@Test
 		void updateTest() {
-			Actor actor = new Actor(1l, "sample", "actor");
-			Actor updatedActor = new Actor(1l, "updated sample", "actor");
+			Actor actor = new Actor(1l, "sample", "actor", null);
+			Actor updatedActor = new Actor(1l, "updated sample", "actor", null);
 			
-			Mockito.when(repo.findById(1l).get()).thenReturn(actor);
+			Mockito.when(repo.findById(1l)).thenReturn(Optional.of(actor));
 			Mockito.when(repo.saveAndFlush(updatedActor)).thenReturn(updatedActor);
 			
 			Assertions.assertEquals(updatedActor, service.update(1l, updatedActor));
@@ -61,14 +64,26 @@ public class ActorServiceUnitTest {
 		
 		@Test
 		void readAllTest() {
-			Actor actor1 = new Actor("sample", "actor1");
-			Actor actor2 = new Actor("sample", "actor2");
 			List<Actor> actors = new ArrayList<Actor>();
-
+			Actor actor = new Actor(1l, "sample", "actor", null);
+			actors.add(actor);
+			
 			Mockito.when(repo.findAll()).thenReturn(actors);
 
 			Assertions.assertEquals(actors, service.readAll());
 			
 			Mockito.verify(repo, times(1)).findAll();
+		}
+		
+		@Test
+		void readAllByNameTest() {
+			List<Actor> actors = new ArrayList<Actor>();
+			Actor actor = new Actor(1l, "sample", "actor", null);
+			actors.add(actor);
+			Mockito.when(repo.findAllByName("sample")).thenReturn(actors);
+
+			Assertions.assertEquals(actors, service.readByName("sample"));
+			
+			Mockito.verify(repo, times(1)).findAllByName("sample");
 		}
 }
