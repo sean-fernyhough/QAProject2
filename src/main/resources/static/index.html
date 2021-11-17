@@ -15,7 +15,6 @@
     <nav class="navbar navbar-expand-md navbar-light bg-light">
         <div class="container-fluid">
             <a><img src="images/logo.png" alt="logo image" height="50px" /></a>
-            <!-- <a class="navbar-brand" href="#">QA Movies</a> -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
                 data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
@@ -23,6 +22,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="#">Movies</a>
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="#">Actors</a>
                     </li>
@@ -37,10 +39,10 @@
                             <li>
                                 <hr class="dropdown-divider">
                             </li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
                         </ul>
                     </li>
                 </ul>
+                <button>dark</button>
                 <form class="d-flex">
                     <div class="dropdown">
                         <select class="form-select" aria-label="Default select example" style="width: 110px;">
@@ -51,18 +53,18 @@
                     <div class="dropdown">
                         <select class="form-select" aria-label="Default select example" style="width: 110px;">
                             <option value="1" class="active">Title</option>
-                            <option value="2">Synopsis</option>
                             <option value="3">Year</option>
                             <option value="4">Actors</option>
                         </select>
                     </div>
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search">
-                    <button class="btn btn-outline-success" type="submit">Search</button>
+                    <button class="btn btn-outline" style="background-color: #ffac11;" type="submit">Search</button>
                 </form>
             </div>
         </div>
     </nav>
-    <div style="background: linear-gradient(#a58700 70%, #ff0000);">
+    <div style="background: linear-gradient(#ffac11 20%, #bb7915 99%); height: 100%;" height="100%">
+        <button>Generate</button>
 
     </div>
 
