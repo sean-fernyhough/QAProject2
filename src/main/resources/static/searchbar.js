@@ -22,9 +22,11 @@ let listActors = (() => {
 
 movieCreateBtn.addEventListener('click', () => {
     let main = document.createElement('div');
-    main.classList = "d-grid justify-content-center"
-    main.style = "background-color: white; position: relative; z-index: 10; top: 50%; left: 30%; right: 30%; max-width: 40%; min-height: 50%; border-radius: 50px"
+    main.classList = "d-grid justify-content-center align-items-center align-self-center"
+    main.style = "background-color: white; position: fixed; z-index: 10; min-width: 40%; max-width: 60%; min-height: 40%; max-height: 80%; border-radius: 50px;"
     console.log("create menu")
+    let overlay = document.createElement('div');
+    overlay.style = "position: fixed; z-index: 5; min-height: 100%; min-width: 100%; background-color: rgba(0, 0, 0, 0.50);";
 
 
 
@@ -46,19 +48,22 @@ movieCreateBtn.addEventListener('click', () => {
                 title.type = "text";
                 title.style = "width: 40px";
                 let yearText = document.createElement('p');
+                yearText.textContent = "Release Year";
                 let year = document.createElement('input')
                 console.log(cast);
 
                 main.appendChild(titleText);
                 main.appendChild(title);
+                main.appendChild(yearText);
+                main.appendChild(year)
                 console.log("appended");
-                // year
                 // runtime
                 // cast
                 // synopsis
                 // rating
 
-                body.appendChild(main)
+                body.appendChild(overlay);
+                body.appendChild(main);
             })
         }
     })
