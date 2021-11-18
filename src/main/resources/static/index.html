@@ -23,10 +23,10 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Movies</a>
+                        <a class="nav-link" aria-current="page" href="site/movies.html">Movies</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Actors</a>
+                        <a class="nav-link" aria-current="page" href="site/actors.html">Actors</a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
@@ -34,27 +34,25 @@
                             Create
                         </a>
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#">Movies</a></li>
-                            <li><a class="dropdown-item" href="#">Actor</a></li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
+                            <li><button class="dropdown-item" id="movieCreate">Movies</button></li>
+                            <li><button class="dropdown-item" id="actorCreate">Actor</button></li>
                         </ul>
                     </li>
                 </ul>
-                <button>dark</button>
+                <button type="button" class="btn btn-outline" id="themeBtn"><img src="images/moon.png" height="40px"
+                        alt="dark mode"></button>
                 <form class="d-flex">
                     <div class="dropdown">
                         <select class="form-select" aria-label="Default select example" style="width: 110px;">
-                            <option value="2">Movies</option>
-                            <option value="3">Actors</option>
+                            <option value="1" id="movieOption">Movies</option>
+                            <option value="2" id="actorOption">Actors</option>
                         </select>
                     </div>
                     <div class="dropdown">
                         <select class="form-select" aria-label="Default select example" style="width: 110px;">
                             <option value="1" class="active">Title</option>
-                            <option value="3">Year</option>
-                            <option value="4">Actors</option>
+                            <option value="2">Year</option>
+                            <option value="3">Actors</option>
                         </select>
                     </div>
                     <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search">
@@ -64,7 +62,7 @@
             </div>
         </div>
     </nav>
-    <div style="background: linear-gradient(#ffac11 20%, #bb7915 99%); height: 100vh; padding: 20px;" height="100vh">
+    <div style="background: linear-gradient(#ffac11 20%, #bb7915 99%); height: 100vh; padding: 20px;">
         <div class="container-fluid d-grid justify-content-sm-center">
             <div class="container-fluid d-grid justify-content-sm-center">
                 <button type="button" class="btn btn-outline btn-lg btn-light" id="randomBtn">Random</button>
