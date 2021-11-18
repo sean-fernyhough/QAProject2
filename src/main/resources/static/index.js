@@ -65,7 +65,10 @@ let getAll = () => {
     fetch(`http://localhost:8080/movies/get`).then((response) => {
         if (response.status != 200) {
             console.log(response);
-        } else {
+        } else if (response.status != 404) {
+            alert("There are no movies in the database, please create one")
+        }
+        else {
             response.json().then((data) => {
                 let movieList = [];
                 console.log(data);
@@ -74,14 +77,11 @@ let getAll = () => {
                     movieList.push(obj);
                 }
                 console.log(movieList);
-                console.log("sss")
                 console.log(pickRandom(movieList));
-                console.log(container.firstChild)
-                document.querySelectorAll('#randomSpace > div')
-                // while (container.firstChild) {
-                //     container.removeChild;
-                //     console.log("removed");
-                // }
+                console.log(container.querySelector('*'));
+                if (container.querySelector('.card')) {
+                    container.removeChild(container.querySelector('.card'));
+                }
                 createCard(pickRandom(movieList))
 
             })
