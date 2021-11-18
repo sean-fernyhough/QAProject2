@@ -47,17 +47,24 @@ movieCreateBtn.addEventListener('click', () => {
                 titleText.textContent = "Title:"
                 let title = document.createElement('input');
                 title.type = "text";
-                title.style = "width: 40px";
                 let yearText = document.createElement('p');
                 let runText = document.createElement('p');
                 let yearRunText = document.createElement('div');
                 yearText.textContent = "Release Year:";
                 runText.textContent = "Approx. Runtime:"
-                yearRunText.style = "display: inline-flex; align-content: space-between"
+                yearRunText.style = "display: inline-flex; justify-content: space-between"
                 let year = document.createElement('input');
+                year.style = "width: 100px";
+                year.type = "number";
+                let run = document.createElement('input');
+                run.style = "width: 100px";
+                run.type = "number";
+                let yearRun = document.createElement('div');
+                yearRun.style = "display: inline-flex; justify-content: space-around"
                 let castText = document.createElement('p');
                 castText.textContent = "Cast:";
                 let castDisplay = document.createElement('div')
+                castDisplay.id = "castDisplay"
                 castDisplay.style = "min-width: 250px; min-height: 40px; border-radius: 10px; border-style: solid; border-width: 1px";
                 let castDropDown = document.createElement('select');
                 castDropDown.classList = "form-select";
@@ -70,7 +77,6 @@ movieCreateBtn.addEventListener('click', () => {
                     curActor.textContent = `${actor.firstName} ${actor.lastName}`;
                     curActor.value = `${actor.firstName} ${actor.lastName}`;
                     curActor.addEventListener('click', (click) => {
-                        console.log(click);
                         let name = click.target.value;
                         defaultCast.selected = true;
                         console.log(name);
@@ -114,7 +120,7 @@ movieCreateBtn.addEventListener('click', () => {
                                             let actorItem = document.createElement('div');
                                             actorItem.style = `background-color: white; margin: 0px;`;
                                             let actorName = document.createElement('p');
-                                            actorName.style = `margin: 0px; padding: 0px 0px 0px 5px `
+                                            actorName.style = `margin: 0px; padding: 0px 0px 0px 5px `;
                                             actorName.textContent = `${actor.firstName} ${actor.lastName}`;
                                             actorItem.appendChild(actorName);
                                             actorList.appendChild(actorItem);
@@ -131,7 +137,6 @@ movieCreateBtn.addEventListener('click', () => {
                                             })
 
                                             actorItem.addEventListener('click', (click) => {
-                                                console.log(click);
                                                 main.removeChild(main.querySelector('#actorList'));
                                                 actorSearch.value = "";
                                                 let name = click.target.textContent;
@@ -159,6 +164,88 @@ movieCreateBtn.addEventListener('click', () => {
                         })
                     }
                 })
+                let synopsisText = document.createElement('p');
+                synopsisText.textContent = "Enter a description of the movie:";
+                let synopsis = document.createElement('textArea');
+                synopsis.placeholder = "Description here...";
+                let ratingText = document.createElement('p');
+                ratingText.textContent = "Give the Movie a rating (0 - 5) :"
+                let rating = document.createElement('input');
+                rating.type = "range";
+                rating.min = 0;
+                rating.max = 5;
+                rating.step = 0.5;
+                rating.value = 0.0;
+                let ratingVerbose = document.createElement('p');
+                let ratingValue = 0.0;
+                rating.addEventListener('input', (slider) => {
+                    ratingValue = slider.target.value;
+                    ratingVerbose.textContent = `Rating: ${ratingValue}/5`;
+                })
+                ratingVerbose.textContent = `Rating: ${ratingValue}/5`;
+                submitBtn = document.createElement('button');
+                submitBtn.textContent = "Submit";
+                submitBtn.classList = "btn btn-outline-success";
+                submitBtn.type = "button";
+
+
+
+                actorFunction = () => {
+                    let castList = document.querySelectorAll('#castDisplay > div > p');
+                    let actorArray = [];
+                    let i = 0;
+                    for (i = 0; i < castList.length; i++) {
+
+                    }
+
+                    let l = 0;
+                    actorAssign = (data) => {
+                        l++;
+                        if (l < i) {
+                            actorArray.push(data[0].id);
+                        } else {
+                            actorArray.push(data[0].id)
+                            console.log(actorArray);
+                        }
+                    }
+
+
+
+
+
+                    for (let aName of castList) {
+                        let actorFetch = fetch(`http://localhost:8080/actors/get/${aName.textContent}`).then((response) => {
+                            if (response.status != 200) {
+                                console.error(response)
+                            }
+                            else {
+                                return response.json().then((data) => {
+                                    actorAssign(data);
+                                })
+                            }
+                        })
+
+
+                    }
+                    // console.log(
+                    //     title.value,
+                    //     year.value,
+                    //     run.value,
+
+                    // );
+
+                    let movie = {
+                    }
+                    // fetch("http://localhost:8080/movies/create", {
+                    //     method: "POST",
+                    //     headers: {
+                    //         "content-type": "application/JSON"
+                    //     },
+                    //     body: JSON.stringify(movie)
+                    // }).then()
+                }
+
+                submitBtn.addEventListener('click', actorFunction);
 
 
                 main.appendChild(titleText);
@@ -166,16 +253,21 @@ movieCreateBtn.addEventListener('click', () => {
                 yearRunText.appendChild(yearText);
                 yearRunText.appendChild(runText);
                 main.appendChild(yearRunText);
-                main.appendChild(year);
+                yearRun.appendChild(year);
+                yearRun.appendChild(run);
+                main.appendChild(yearRun)
                 main.appendChild(castText);
                 main.appendChild(castDisplay);
                 main.appendChild(castDropDown);
                 main.appendChild(actorSearch);
+                main.appendChild(synopsisText);
+                main.appendChild(synopsis);
+                main.appendChild(ratingText);
+                main.appendChild(rating);
+                main.appendChild(ratingVerbose);
+                main.appendChild(submitBtn)
+
                 console.log("appended");
-                // runtime
-                // cast
-                // synopsis
-                // rating
 
                 body.appendChild(overlay);
                 body.appendChild(main);
