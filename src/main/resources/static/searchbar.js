@@ -48,14 +48,36 @@ movieCreateBtn.addEventListener('click', () => {
                 title.type = "text";
                 title.style = "width: 40px";
                 let yearText = document.createElement('p');
-                yearText.textContent = "Release Year";
-                let year = document.createElement('input')
-                console.log(cast);
+                yearText.textContent = "Release Year:";
+                let year = document.createElement('input');
+                let castText = document.createElement('p');
+                castText.textContent = "Cast:";
+                let castDisplay = document.createElement('div')
+
+                let castDropDown = document.createElement('select');
+                castDropDown.classList = "form-select";
+                let defaultCast = document.createElement('option')
+                defaultCast.textContent = "Select an actor";
+                defaultCast.selected = true;
+                castDropDown.appendChild(defaultCast);
+                for (let actor of cast) {
+                    let curActor = document.createElement('option');
+                    curActor.textContent = `${actor.firstName} ${actor.lastName}`;
+                    curActor.value = `${actor.firstName} ${actor.lastName}`;
+                    curActor.addEventListener('click', (value) => {
+                        defaultCast.selected = true;
+                        console.log(value);
+                    })
+                    castDropDown.appendChild(curActor);
+                }
 
                 main.appendChild(titleText);
                 main.appendChild(title);
                 main.appendChild(yearText);
-                main.appendChild(year)
+                main.appendChild(year);
+                main.appendChild(castText);
+                main.appendChild(castDisplay);
+                main.appendChild(castDropDown);
                 console.log("appended");
                 // runtime
                 // cast
