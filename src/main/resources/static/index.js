@@ -65,8 +65,9 @@ let getAll = () => {
     fetch(`http://localhost:8080/movies/get`).then((response) => {
         if (response.status != 200) {
             console.log(response);
-        } else if (response.status != 404) {
-            alert("There are no movies in the database, please create one")
+        } else if (response.status == 404) {
+            alert("There are no movies in the database, please create one");
+            console.log(response);
         }
         else {
             response.json().then((data) => {
