@@ -5,6 +5,7 @@ let movieCreateBtn = document.querySelector('#movieCreate');
 
 let actorCreateBtn = document.querySelector('#actorCreate');
 
+let currentTheme = "light";
 
 let listActors = (() => {
     fetch('http://localhost:8080/actors/get').then((response) => {
@@ -53,7 +54,7 @@ movieCreateBtn.addEventListener('click', () => {
                 let castText = document.createElement('p');
                 castText.textContent = "Cast:";
                 let castDisplay = document.createElement('div')
-
+                castDisplay.style = "min-width: 250px; min-height: 40px; border-radius: 10px; border-style: solid; border-width: 1px";
                 let castDropDown = document.createElement('select');
                 castDropDown.classList = "form-select";
                 let defaultCast = document.createElement('option')
@@ -64,12 +65,56 @@ movieCreateBtn.addEventListener('click', () => {
                     let curActor = document.createElement('option');
                     curActor.textContent = `${actor.firstName} ${actor.lastName}`;
                     curActor.value = `${actor.firstName} ${actor.lastName}`;
-                    curActor.addEventListener('click', (value) => {
+                    curActor.addEventListener('click', (click) => {
+                        console.log(click);
+                        let name = click.target.value;
                         defaultCast.selected = true;
-                        console.log(value);
+                        console.log(name);
+                        let addedActor = document.createElement('div');
+                        addedActor.style = "display:flex; justify-content: space-between; background-color: off-white; border-style: solid; border-width:0.5px; border-radius: 10px; padding: 5px; margin: 3px"
+                        let addedActorName = document.createElement('p');
+                        addedActorName.textContent = name;
+                        addedActorName.style = "display:inline; margin: 0px 10px 0px 0px;"
+                        let actorRemoveBtn = document.createElement('button');
+                        actorRemoveBtn.addEventListener('click', (obj) => {
+                            let parent = obj.target.parentElement;
+                            castDisplay.removeChild(parent);
+                        })
+                        actorRemoveBtn.type = "button";
+                        actorRemoveBtn.classList = "btn-close";
+                        addedActor.appendChild(addedActorName);
+                        addedActor.appendChild(actorRemoveBtn);
+                        castDisplay.appendChild(addedActor);
                     })
                     castDropDown.appendChild(curActor);
                 }
+                actorSearch = document.createElement('input');
+                actorSearch.addEventListener('input', (input) => {
+                    let value = input.target.value;
+                    console.log(value)
+                    if (value != "") {
+                        fetch(`http://localhost:8080/actors/get/${value}`).then((response) => {
+                            if (response.status != 200 && response.status != 404) {
+                                console.error(response);
+                            } else if (response.status == 404) {
+                                console.warn(`no actors found with name: ${value}`);
+                            } else {
+                                response.json().then((data) => {
+                                    let actorList = document.createElement('ul');
+                                    for (actor of data)
+                                        console.log(`${actor.firstName} ${actor.lastName}`);
+                                    let actorItem = document.createElement('li');
+                                    let actorName = document.createElement('p');
+                                    actorName.textContent = `${actor.firstName} ${actor.lastName}`;
+                                    actorItem.appendChild(actorName);
+                                    actorList.appendChild(actorItem);
+
+                                })
+                            }
+                        })
+                    }
+                })
+
 
                 main.appendChild(titleText);
                 main.appendChild(title);
@@ -78,6 +123,7 @@ movieCreateBtn.addEventListener('click', () => {
                 main.appendChild(castText);
                 main.appendChild(castDisplay);
                 main.appendChild(castDropDown);
+                main.appendChild(actorSearch);
                 console.log("appended");
                 // runtime
                 // cast
