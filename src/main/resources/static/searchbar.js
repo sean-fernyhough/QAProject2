@@ -23,6 +23,72 @@ let listActors = (() => {
     })
 })
 
+actorCreateBtn.addEventListener('click', () => {
+    let main = document.createElement('div');
+    main.classList = "d-grid justify-content-center align-items-center align-self-center"
+    main.style = "overflow: auto; background-color: white; position: fixed; z-index: 10; min-width: 40%; max-width: 97%; min-height: 40%; max-height: 90%; border-radius: 50px; padding: 20px; margin: 0px 30px 0px 30px;"
+    main.id = "menu";
+    console.log("create menu")
+    let overlay = document.createElement('div');
+    overlay.id = "overlay"
+    overlay.style = "position: fixed; z-index: 5; min-height: 100%; min-width: 100%; background-color: rgba(0, 0, 0, 0.50);";
+
+    fNameText = document.createElement('p');
+    fNameText.textContent = "First Name:"
+    fNameInput = document.createElement('input');
+    lNameText = document.createElement('p');
+    lNameText.textContent = "Last Name:"
+    lNameInput = document.createElement('input');
+
+    submitBtn = document.createElement('button');
+    submitBtn.textContent = "Submit";
+    submitBtn.classList = "btn btn-outline-success";
+    submitBtn.type = "button";
+    submitBtn.addEventListener('click', () => {
+        if (fNameInput.value == "" || lNameInput.value == "") {
+            console.error("name required");
+        } else {
+            console.log(overlay);
+            let newActor = {
+                "firstName": fNameInput.value,
+                "lastName": lNameInput.value,
+            }
+            body.removeChild(document.querySelector('#menu'));
+            body.removeChild(document.querySelector('#overlay'));
+            fetch(`http://localhost:8080/actors/create`, {
+                method: "POST",
+                headers: {
+                    "content-Type": "application/JSON"
+                },
+                body: JSON.stringify(newActor)
+            }).then((response) => {
+                if (response.status != 201) {
+                    console.error(response);
+                } else {
+                    response.json().then((data) => {
+                        console.log(data);
+                    })
+                }
+            })
+        }
+    });
+
+
+    overlay.addEventListener('click', () => {
+        body.removeChild(document.querySelector('#menu'));
+        body.removeChild(document.querySelector('#overlay'));
+    })
+
+
+    main.appendChild(fNameText);
+    main.appendChild(fNameInput);
+    main.appendChild(lNameText);
+    main.appendChild(lNameInput);
+    main.appendChild(submitBtn);
+    body.appendChild(overlay);
+    body.appendChild(main);
+});
+
 movieCreateBtn.addEventListener('click', () => {
     let main = document.createElement('div');
     main.classList = "d-grid justify-content-center align-items-center align-self-center"
@@ -211,19 +277,10 @@ movieCreateBtn.addEventListener('click', () => {
                     }
 
                     if (synopsis.value.length > 255) {
-                        console.log("dsas")
                         enabled = false;
 
                         alert("description can not be longer than 255 characters");
                     }
-
-
-
-                    console.log(
-                        title.value,
-                        year.value,
-                        run.value,
-                    );
 
                     if (enabled) {
 
@@ -251,12 +308,12 @@ movieCreateBtn.addEventListener('click', () => {
                                 }
                                 console.log(actorIdArray);
                                 let movieObj = {
-                                    title: title.value,
-                                    year: year.value,
-                                    runtime: run.value,
-                                    cast: actorIdArray,
-                                    synopsis: synopsis.value,
-                                    rating: rating.value
+                                    "title": title.value,
+                                    "year": year.value,
+                                    "runtime": run.value,
+                                    "cast": actorIdArray,
+                                    "synopsis": synopsis.value,
+                                    "rating": rating.value
                                 }
                                 fetch("http://localhost:8080/movies/create", {
                                     method: "POST",
@@ -271,46 +328,57 @@ movieCreateBtn.addEventListener('click', () => {
                                         alert(`Status: ${response.status}`);
                                         response.json().then((data) => {
                                             console.log(data);
+                                            body.removeChild(document.querySelector('#menu'));
+                                            body.removeChild(document.querySelector('#overlay'));
                                         })
-                                    } fetch("http://localhost:8080")
+                                    }
                                 })
                             }
                         }
 
 
 
-
-
-                        for (let aName of castList) {
-                            fetch(`http://localhost:8080/actors/get/${aName.textContent}`).then((response) => {
-                                if (response.status != 200) {
-                                    console.error(response)
-                                }
-                                else {
-                                    return response.json().then((data) => {
-                                        actorAssign(data);
+                        if (i > 0) {
+                            for (let aName of castList) {
+                                fetch(`http://localhost:8080/actors/get/${aName.textContent}`).then((response) => {
+                                    if (response.status != 200) {
+                                        console.error(response)
+                                    }
+                                    else {
+                                        return response.json().then((data) => {
+                                            actorAssign(data);
+                                        })
+                                    }
+                                })
+                            }
+                        } else {
+                            let movieObj = {
+                                "title": title.value,
+                                "year": year.value,
+                                "runtime": run.value,
+                                "synopsis": synopsis.value,
+                                "rating": rating.value
+                            }
+                            fetch("http://localhost:8080/movies/create", {
+                                method: "POST",
+                                headers: {
+                                    "content-type": "application/JSON"
+                                },
+                                body: JSON.stringify(movieObj)
+                            }).then((response) => {
+                                if (response.status != 201) {
+                                    console.error(response);
+                                } else {
+                                    alert(`Status: ${response.status}`);
+                                    response.json().then((data) => {
+                                        console.log(data);
+                                        body.removeChild(document.querySelector('#menu'));
+                                        body.removeChild(document.querySelector('#overlay'));
                                     })
                                 }
                             })
 
-
                         }
-                        // console.log(
-                        //     title.value,
-                        //     year.value,
-                        //     run.value,
-
-                        // );
-
-                        let movie = {
-                        }
-                        // fetch("http://localhost:8080/movies/create", {
-                        //     method: "POST",
-                        //     headers: {
-                        //         "content-type": "application/JSON"
-                        //     },
-                        //     body: JSON.stringify(movie)
-                        // }).then()
                     }
                 }
 
