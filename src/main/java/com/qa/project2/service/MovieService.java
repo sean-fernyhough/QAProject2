@@ -63,5 +63,9 @@ public class MovieService {
 		if ((movies = repo.findAllByName(name)).size() < 1) {throw new NoMoviesFoundException();};
 		return movies;
 	}
+	
+	public Movie readById(long id) {
+		return repo.findById(id).orElseThrow(MovieNotFoundException::new);
+	}
 
 }

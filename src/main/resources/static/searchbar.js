@@ -205,6 +205,7 @@ searchSubmit.addEventListener('click', () => {
                 }
                 localStorage.setItem("data", JSON.stringify(data));
                 localStorage.setItem("searchType", searchType);
+                localStorage.setItem("fetchString", fetchString);
                 window.open("results.html", "_self");
             })
         }
@@ -296,11 +297,11 @@ actorCreateBtn.addEventListener('click', () => {
 movieCreateBtn.addEventListener('click', () => {
     let main = document.createElement('div');
     main.classList = "d-grid justify-content-center align-items-center align-self-center"
-    main.style = "overflow: auto; background-color: white; position: fixed; z-index: 10; min-width: 40%; max-width: 97%; min-height: 40%; max-height: 90%; border-radius: 50px; padding: 20px; margin: 0px 30px 0px 30px;"
+    main.style = "overflow: auto; background-color: white; position: fixed; z-index: 10; min-width: 40%; max-width: 97%; min-height: 40%; max-height: 90%; border-radius: 50px; padding: 20px; margin: 0px 30px 0px 30px; top:10%; bottom:10%"
     main.id = "menu";
     console.log("create menu")
     let overlay = document.createElement('div');
-    overlay.id = "overlay"
+    overlay.id = "overlay";
     overlay.style = "position: fixed; z-index: 5; min-height: 100%; min-width: 100%; background-color: rgba(0, 0, 0, 0.50);";
     overlay.addEventListener('click', () => {
         body.removeChild(document.querySelector('#menu'));
