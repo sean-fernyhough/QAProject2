@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="height: 100%; width: 100%;" ;>
 
 <head>
     <meta charset="UTF-8">
@@ -11,63 +11,68 @@
     <title>My Movie</title>
 </head>
 
-<body>
-    <nav class="navbar navbar-expand-md navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand"><img src="images/logo.png" alt="logo image" height="40px" /></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
-                aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="site/movies.html">Movies</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" aria-current="page" href="site/actors.html">Actors</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                            Create
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                            <li><button class="dropdown-item" id="movieCreate">Movies</button></li>
-                            <li><button class="dropdown-item" id="actorCreate">Actor</button></li>
-                        </ul>
-                    </li>
-                </ul>
-                <button type="button" class="btn btn-outline" id="themeBtn"><img src="images/moon.png" height="40px"
-                        alt="dark mode"></button>
-                <form class="d-flex">
-                    <div class="dropdown">
-                        <select class="form-select" aria-label="Default select example" style="width: 110px;">
-                            <option value="1" id="movieOption">Movies</option>
-                            <option value="2" id="actorOption">Actors</option>
-                        </select>
-                    </div>
-                    <div class="dropdown">
-                        <select class="form-select" aria-label="Default select example" style="width: 110px;">
-                            <option value="1" class="active">Title</option>
-                            <option value="2">Year</option>
-                            <option value="3">Actors</option>
-                        </select>
-                    </div>
-                    <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" id="search">
-                    <button class="btn btn-outline" style="background-color: #ffac11; color: #ffffff;"
-                        type="submit">Search</button>
-                </form>
+<body class="d-flex justify-content-center"
+    style="background: linear-gradient(#ffac11 20%, #bb7915 99%); min-height: 100%; min-width: 100%">
+    <div id="page" style="position: fixed; z-index: 1; min-height: 100%; min-width: 100%">
+        <nav class="navbar navbar-expand-md navbar-light bg-light">
+            <div class="container-fluid">
+                <a class="navbar-brand"><img src="images/logo.png" alt="logo image" height="40px" /></a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                    aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="site/movies.html">Movies</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" aria-current="page" href="site/actors.html">Actors</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+                                data-bs-toggle="dropdown" aria-expanded="false">
+                                New
+                            </a>
+                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <li><button type="button" class="dropdown-item" id="movieCreate">Movie</button></li>
+                                <li><button class="dropdown-item" id="actorCreate">Actor</button></li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <button type="button" class="btn btn-outline" id="themeBtn"><img src="images/moon.png" height="30px"
+                            alt="dark mode"></button>
+                    <form class="d-flex" id="search-container">
+                        <div class="dropdown">
+                            <select class="form-select" style="width: 110px;" id="search-drop-1">
+                                <option value="1" selected="selected">Movies</option>
+                                <option value="2">Actors</option>
+                            </select>
+                        </div>
+                        <div class="dropdown">
+                            <select class="form-select" aria-label="Default select example" style="width: 110px;"
+                                id="search-drop-2">
+                                <option value="1" selected="selected">Title</option>
+                                <option value="2">Year</option>
+                                <option value="3">Actor</option>
+                            </select>
+                        </div>
+                        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"
+                            id="search-input">
+                        <button class="btn btn-outline" style="background-color: #ffac11; color: #ffffff;" type="button"
+                            id="search-submit">Search</button>
+                    </form>
+                </div>
             </div>
-        </div>
-    </nav>
-    <div style="background: linear-gradient(#ffac11 20%, #bb7915 99%); height: 100vh; padding: 20px;">
-        <div class="container-fluid d-grid justify-content-sm-center">
+        </nav>
+        <div style="padding: 20px;">
             <div class="container-fluid d-grid justify-content-sm-center">
-                <button type="button" class="btn btn-outline btn-lg btn-light" id="randomBtn">Random</button>
-            </div>
-            <div class="d-flex flex-wrap gap-3 m-5 mt-2" id="randomSpace">
+                <div class="container-fluid d-grid justify-content-sm-center">
+                    <button type="button" class="btn btn-outline btn-lg btn-light" id="randomBtn">Random</button>
+                </div>
+                <div class="d-flex flex-wrap gap-3 m-5 mt-2" id="randomSpace">
+                </div>
             </div>
         </div>
     </div>
