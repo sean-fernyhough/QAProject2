@@ -9,6 +9,161 @@ let currentTheme = "light";
 
 
 
+let searchTypeOne = 1;
+let searchTypeTwo = 1;
+
+let searchDropOne = document.querySelector('#search-drop-1');
+let searchDropTwo = document.querySelector('#search-drop-2');
+let searchInput = document.querySelector('#search-input');
+let searchSubmit = document.querySelector('#search-submit');
+let searchContainer = document.querySelector('#search-container');
+
+searchDropOne.addEventListener('change', (drop) => {
+    searchInput.value = "";
+    if (drop.target.value == 1) {
+        searchTypeOne = 1;
+        searchDropTwo.style.display = "inline";
+    } else if (drop.target.value == 2) {
+        searchTypeOne = 2;
+        searchDropTwo.style.display = "none";
+    }
+})
+
+searchDropTwo.addEventListener('change', (drop) => {
+    searchInput.value = "";
+    if (drop.target.value == 1) {
+        searchTypeTwo = 1;
+    } else if (drop.target.value == 2) {
+        searchTypeTwo = 2;
+    } else if (drop.target.value == 3) {
+        searchTypeTwo = 3;
+    }
+})
+
+searchInput.addEventListener('focusin', (input) => {
+    searchbarFunction(input);
+
+})
+
+//-----------------------------------------------------------------------------
+
+searchInput.addEventListener('focusout', () => {
+    if (searchContainer.querySelector('#searchList')) {
+        searchContainer.removeChild(searchContainer.querySelector('#searchList'));
+    }
+})
+
+// ---------------------------------------------------------------------------------
+
+searchInput.addEventListener('input', (input) => {
+    if (searchContainer.querySelector('#searchList')) {
+        searchContainer.removeChild(searchContainer.querySelector('#searchList'));
+    }
+    searchbarFunction(input);
+})
+// ---------------------------------------------------------------------
+let searchbarFunction = (input) => {
+    let value = input.target.value;
+    if (value != "") {
+        let fetchString = "";
+        let auto = true;
+        if (searchTypeOne == 2) {
+            fetchString = `http://localhost:8080/actors/get/${value}`;
+        } else {
+            if (searchTypeTwo == 1) {
+                fetchString = `http://localhost:8080/movies/get/title/${value}`;
+            } else if (searchTypeTwo == 2) {
+                fetchString = `http://localhost:8080/movies/get/year/${value}`;
+                auto = false;
+            } else if (searchTypeTwo == 3) {
+                fetchString = `http://localhost:8080/movies/get/cast/${value}`;
+            } else {
+                console.error("error");
+            }
+        }
+        if (auto == true) {
+            fetch(fetchString).then((response) => {
+                if (response.status != 200 && response.status != 404) {
+                    console.error(response);
+                } else if (response.status == 404) {
+                    console.warn(`no results found for: ${value}`);
+                } else {
+                    console.log(response);
+                    console.log(fetchString);
+                    response.json().then((data) => {
+                        if (data.length > 0) {
+                            let searchList = document.createElement('div');
+                            if (searchDropOne == 2) {
+                                for (let actor of data) {
+                                    let actorItem = document.createElement('div');
+                                    actorItem.style = `background-color: white; margin: 0px;`;
+                                    let actorName = document.createElement('p');
+                                    actorName.style = `margin: 0px; padding: 0px 0px 0px 5px `;
+                                    actorName.textContent = `${actor.firstName} ${actor.lastName}`;
+                                    actorItem.appendChild(actorName);
+                                    searchList.appendChild(actorItem);
+                                    searchList.style = `overflow-y: auto; position: absolute; z-index: 15; right:93px; top: 50px; min-width: 227px; max-height: 300px; background-color: white; border-style: solid; border-width: 1px; padding: 3px 0px; border-radius: 3px;`;
+
+                                    searchList.id = "searchList";
+                                    searchInput.insertAdjacentElement("afterend", searchList);
+
+                                    actorItem.addEventListener('mouseout', () => {
+                                        actorItem.style = "background-color: white";
+                                    });
+
+                                    actorItem.addEventListener('mouseover', () => {
+                                        actorItem.style = "background-color: blue; cursor:default";
+                                    });
+
+                                    actorItem.addEventListener('click', (click) => {
+                                        searchContainer.removeChild(searchContainer.querySelector('#searchList'));
+                                        searchInput.value = click.target.textContent;
+                                    });
+                                }
+                            } else if (searchDropOne != 2) {
+                                for (let movie of data) {
+                                    let movieItem = document.createElement('div');
+                                    movieItem.style = `background-color: white; margin: 0px;`;
+                                    let movieTitle = document.createElement('p');
+                                    movieTitle.style = `margin: 0px; padding: 0px 0px 0px 5px `;
+                                    movieTitle.textContent = `${movie.title} (${movie.year})`;
+                                    movieItem.appendChild(movieTitle);
+                                    searchList.appendChild(movieItem);
+                                    searchList.style = `overflow-y: auto; position: absolute; z-index: 15; right:93px; top: 50px; min-width: 227px; max-height: 300px; background-color: white; border-style: solid; border-width: 1px; padding: 3px 0px; border-radius: 3px;`;
+
+                                    searchList.id = "searchList";
+                                    searchInput.insertAdjacentElement("afterend", searchList);
+
+                                    movieItem.addEventListener('mouseout', () => {
+                                        movieItem.style = "background-color: white";
+                                    });
+
+                                    movieItem.addEventListener('mouseover', () => {
+                                        movieItem.style = "background-color: blue; cursor:default";
+                                    });
+
+                                    movieItem.addEventListener('click', (click) => {
+                                        searchContainer.removeChild(searchContainer.querySelector('#searchList'));
+                                        searchInput.value = click.target.textContent;
+                                    });
+                                }
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    }
+}
+
+
+
+// --------------------------------------------------------------------------
+
+
+
+// ---------------------------------------------------------------------------
+
 let listActors = (() => {
     fetch('http://localhost:8080/actors/get').then((response) => {
         if (response.status != 200 && response.status != 404) {
@@ -173,6 +328,7 @@ movieCreateBtn.addEventListener('click', () => {
                     castDropDown.appendChild(curActor);
                 }
                 actorSearch = document.createElement('input');
+                actorSearch.placeholder = "Or search for an actor here";
                 actorSearch.addEventListener('input', (input) => {
                     if (main.querySelector('#actorList')) {
                         main.removeChild(main.querySelector('#actorList'));
@@ -198,8 +354,8 @@ movieCreateBtn.addEventListener('click', () => {
                                             actorName.textContent = `${actor.firstName} ${actor.lastName}`;
                                             actorItem.appendChild(actorName);
                                             actorList.appendChild(actorItem);
-                                            // actorList.style = `z-index:15;background-color: white; border-style: solid; border-width: 1px; padding: 3px 0px 3px 0px; border-radius: 3px`;
-                                            actorList.style = `overflow:auto;position: absolute; z-index: 15; left:73px; top: 305px;min-width:250px;max-height:300px; background-color: white; border-style: solid; border-width: 1px; padding: 3px 0px; border-radius: 3px;`;
+                                            actorList.style = `overflow:auto;position: absolute; z-index: 15; justify-self: center;top: 305px;min-width:250px;max-height:300px; background-color: white; border-style: solid; border-width: 1px; padding: 3px 0px; border-radius: 3px;`;
+
                                             actorList.id = "actorList";
                                             actorSearch.insertAdjacentElement("afterend", actorList);
 
