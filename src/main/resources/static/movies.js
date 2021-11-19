@@ -150,7 +150,7 @@ let createCardMovie = (movie) => {
                                 castDisplay.style = "min-width: 250px; min-height: 40px; border-radius: 10px; border-style: solid; border-width: 1px";
                                 // ---------------------------------------
                                 let actorRemoveBtn
-                                for (oldActor of oldCast) {
+                                for (let oldActor of oldCast) {
                                     let addedOldActor = document.createElement('div');
                                     addedOldActor.style = "display:flex; justify-content: space-between; background-color: off-white; border-style: solid; border-width:0.5px; border-radius: 10px; padding: 5px; margin: 3px"
                                     let addedOldActorName = document.createElement('p');
@@ -200,7 +200,7 @@ let createCardMovie = (movie) => {
                                     })
                                     castDropDown.appendChild(curActor);
                                 }
-                                actorSearch = document.createElement('input');
+                                let actorSearch = document.createElement('input');
                                 actorSearch.placeholder = "Or search for an actor here";
                                 actorSearch.addEventListener('input', (input) => {
                                     if (main.querySelector('#actorList')) {
@@ -289,14 +289,14 @@ let createCardMovie = (movie) => {
                                     ratingVerbose.textContent = `Rating: ${ratingValue}/5`;
                                 })
                                 ratingVerbose.textContent = `Rating: ${oldRating}/5`;
-                                submitBtn = document.createElement('button');
+                                let submitBtn = document.createElement('button');
                                 submitBtn.textContent = "Update";
                                 submitBtn.classList = "btn btn-outline-success";
                                 submitBtn.type = "button";
 
 
 
-                                actorFunction = () => {
+                                let actorFunction = () => {
                                     let enabled = true;
 
                                     if (title.value == "") {
