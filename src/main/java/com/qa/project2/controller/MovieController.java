@@ -41,6 +41,11 @@ public class MovieController {
 		return new ResponseEntity<List<Movie>>(service.readAll(), HttpStatus.OK);
 	}
 	
+	@GetMapping("/get/{id}")
+	public ResponseEntity<Movie> readById(@PathVariable long id){
+		return new ResponseEntity<Movie>(service.readById(id), HttpStatus.OK);
+	}
+	
 	@GetMapping("/get/title/{title}")
 	public ResponseEntity<List<Movie>> readAllByTitle(@PathVariable String title){
 		return new ResponseEntity<List<Movie>>(service.readAllByTitle(title), HttpStatus.OK);
