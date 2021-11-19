@@ -26,11 +26,16 @@ let listActors = (() => {
 movieCreateBtn.addEventListener('click', () => {
     let main = document.createElement('div');
     main.classList = "d-grid justify-content-center align-items-center align-self-center"
-    main.style = "overflow: auto; background-color: white; position: fixed; z-index: 10; min-width: 40%; max-width: 90%; min-height: 40%; max-height: 90%; border-radius: 50px; padding: 20px; margin: 0px 30px 0px 30px;"
+    main.style = "overflow: auto; background-color: white; position: fixed; z-index: 10; min-width: 40%; max-width: 97%; min-height: 40%; max-height: 90%; border-radius: 50px; padding: 20px; margin: 0px 30px 0px 30px;"
+    main.id = "menu";
     console.log("create menu")
     let overlay = document.createElement('div');
+    overlay.id = "overlay"
     overlay.style = "position: fixed; z-index: 5; min-height: 100%; min-width: 100%; background-color: rgba(0, 0, 0, 0.50);";
-
+    overlay.addEventListener('click', () => {
+        body.removeChild(document.querySelector('#menu'));
+        body.removeChild(document.querySelector('#overlay'));
+    })
 
 
     fetch('http://localhost:8080/actors/get').then((response) => {
@@ -127,7 +132,8 @@ movieCreateBtn.addEventListener('click', () => {
                                             actorName.textContent = `${actor.firstName} ${actor.lastName}`;
                                             actorItem.appendChild(actorName);
                                             actorList.appendChild(actorItem);
-                                            actorList.style = `z-index:15;background-color: white; border-style: solid; border-width: 1px; padding: 3px 0px 3px 0px; border-radius: 3px`;
+                                            // actorList.style = `z-index:15;background-color: white; border-style: solid; border-width: 1px; padding: 3px 0px 3px 0px; border-radius: 3px`;
+                                            actorList.style = `overflow:auto;position: absolute; z-index: 15; left:73px; top: 305px;min-width:250px;max-height:300px; background-color: white; border-style: solid; border-width: 1px; padding: 3px 0px; border-radius: 3px;`;
                                             actorList.id = "actorList";
                                             actorSearch.insertAdjacentElement("afterend", actorList);
 
