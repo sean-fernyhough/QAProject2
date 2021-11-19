@@ -8,7 +8,6 @@ let actorCreateBtn = document.querySelector('#actorCreate');
 let currentTheme = "light";
 
 
-
 let searchTypeOne = 1;
 let searchTypeTwo = 1;
 
@@ -41,16 +40,19 @@ searchDropTwo.addEventListener('change', (drop) => {
 })
 
 searchInput.addEventListener('focusin', (input) => {
-    searchbarFunction(input);
+    searchbarFunction(input, false);
 
 })
 
 //-----------------------------------------------------------------------------
 
 searchInput.addEventListener('focusout', () => {
-    if (searchContainer.querySelector('#searchList')) {
-        searchContainer.removeChild(searchContainer.querySelector('#searchList'));
-    }
+    setTimeout(
+        () => {
+            if (searchContainer.querySelector('#searchList')) {
+                searchContainer.removeChild(searchContainer.querySelector('#searchList'));
+            }
+        }, 200);
 })
 
 // ---------------------------------------------------------------------------------
@@ -59,10 +61,12 @@ searchInput.addEventListener('input', (input) => {
     if (searchContainer.querySelector('#searchList')) {
         searchContainer.removeChild(searchContainer.querySelector('#searchList'));
     }
-    searchbarFunction(input);
+    searchbarFunction(input, false);
 })
-// ---------------------------------------------------------------------
-let searchbarFunction = (input) => {
+
+
+// --------------------------------------------------------------------------------
+let searchbarFunction = (input, isSubmit) => {
     let value = input.target.value;
     if (value != "") {
         let fetchString = "";
@@ -74,13 +78,15 @@ let searchbarFunction = (input) => {
                 fetchString = `http://localhost:8080/movies/get/title/${value}`;
             } else if (searchTypeTwo == 2) {
                 fetchString = `http://localhost:8080/movies/get/year/${value}`;
-                auto = false;
+                // auto = false;
             } else if (searchTypeTwo == 3) {
                 fetchString = `http://localhost:8080/movies/get/cast/${value}`;
             } else {
                 console.error("error");
             }
         }
+
+
         if (auto == true) {
             fetch(fetchString).then((response) => {
                 if (response.status != 200 && response.status != 404) {
@@ -160,7 +166,50 @@ let searchbarFunction = (input) => {
 
 // --------------------------------------------------------------------------
 
+searchSubmit.addEventListener('click', () => {
+    let value = searchInput.value;
 
+    let fetchString = "";
+    if (searchTypeOne == 2) {
+        fetchString = `http://localhost:8080/actors/get/${value}`;
+    } else {
+        if (searchTypeTwo == 1) {
+            fetchString = `http://localhost:8080/movies/get/title/${value}`;
+        } else if (searchTypeTwo == 2) {
+            fetchString = `http://localhost:8080/movies/get/year/${value}`;
+        } else if (searchTypeTwo == 3) {
+            fetchString = `http://localhost:8080/movies/get/cast/${value}`;
+        } else {
+            console.error("error");
+        }
+    }
+
+    let searchType;
+    fetch(fetchString).then((response) => {
+        if (response.status != 200 && response.status != 404) {
+            console.error(response);
+        } else if (response.status == 404) {
+            console.warn(`no results found for: ${value}`);
+            let data = [];
+            localStorage.setItem("data", JSON.stringify(data));
+            localStorage.setItem("searchType", "none");
+            window.open("results.html", "_self");
+        } else {
+            console.log(response);
+            console.log(fetchString);
+            response.json().then((data) => {
+                if (searchDropOne == 2) {
+                    searchType = "actor";
+                } else {
+                    searchType = "movie";
+                }
+                localStorage.setItem("data", JSON.stringify(data));
+                localStorage.setItem("searchType", searchType);
+                window.open("results.html", "_self");
+            })
+        }
+    })
+})
 
 // ---------------------------------------------------------------------------
 
