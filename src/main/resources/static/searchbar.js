@@ -7,6 +7,8 @@ let actorCreateBtn = document.querySelector('#actorCreate');
 
 let currentTheme = "light";
 
+
+
 let listActors = (() => {
     fetch('http://localhost:8080/actors/get').then((response) => {
         if (response.status != 200 && response.status != 404) {
@@ -24,7 +26,7 @@ let listActors = (() => {
 movieCreateBtn.addEventListener('click', () => {
     let main = document.createElement('div');
     main.classList = "d-grid justify-content-center align-items-center align-self-center"
-    main.style = "background-color: white; position: fixed; z-index: 10; min-width: 40%; max-width: 60%; min-height: 40%; max-height: 80%; border-radius: 50px; padding: 20px"
+    main.style = "overflow: auto; background-color: white; position: fixed; z-index: 10; min-width: 40%; max-width: 90%; min-height: 40%; max-height: 90%; border-radius: 50px; padding: 20px; margin: 0px 30px 0px 30px;"
     console.log("create menu")
     let overlay = document.createElement('div');
     overlay.style = "position: fixed; z-index: 5; min-height: 100%; min-width: 100%; background-color: rgba(0, 0, 0, 0.50);";
@@ -47,6 +49,7 @@ movieCreateBtn.addEventListener('click', () => {
                 titleText.textContent = "Title:"
                 let title = document.createElement('input');
                 title.type = "text";
+                title.classList = "has-validation";
                 let yearText = document.createElement('p');
                 let runText = document.createElement('p');
                 let yearRunText = document.createElement('div');
@@ -124,9 +127,9 @@ movieCreateBtn.addEventListener('click', () => {
                                             actorName.textContent = `${actor.firstName} ${actor.lastName}`;
                                             actorItem.appendChild(actorName);
                                             actorList.appendChild(actorItem);
-                                            actorList.style = `background-color: white; border-style: solid; border-width: 1px; padding: 3px 0px 3px 0px; border-radius: 3px`;
+                                            actorList.style = `z-index:15;background-color: white; border-style: solid; border-width: 1px; padding: 3px 0px 3px 0px; border-radius: 3px`;
                                             actorList.id = "actorList";
-                                            main.append(actorList);
+                                            actorSearch.insertAdjacentElement("afterend", actorList);
 
                                             actorItem.addEventListener('mouseout', () => {
                                                 actorItem.style = "background-color: white"
@@ -168,6 +171,7 @@ movieCreateBtn.addEventListener('click', () => {
                 synopsisText.textContent = "Enter a description of the movie:";
                 let synopsis = document.createElement('textArea');
                 synopsis.placeholder = "Description here...";
+                synopsis.maxlength = 255;
                 let ratingText = document.createElement('p');
                 ratingText.textContent = "Give the Movie a rating (0 - 5) :"
                 let rating = document.createElement('input');
@@ -191,58 +195,117 @@ movieCreateBtn.addEventListener('click', () => {
 
 
                 actorFunction = () => {
-                    let castList = document.querySelectorAll('#castDisplay > div > p');
-                    let actorArray = [];
-                    let i = 0;
-                    for (i = 0; i < castList.length; i++) {
+                    let enabled = true;
 
+                    if (title.value == "") {
+                        console.log("dsas")
+                        enabled = false;
+
+                        alert("Movie requires a title");
                     }
 
-                    let l = 0;
-                    actorAssign = (data) => {
-                        l++;
-                        if (l < i) {
-                            actorArray.push(data[0].id);
-                        } else {
-                            actorArray.push(data[0].id)
-                            console.log(actorArray);
+                    if (synopsis.value.length > 255) {
+                        console.log("dsas")
+                        enabled = false;
+
+                        alert("description can not be longer than 255 characters");
+                    }
+
+
+
+                    console.log(
+                        title.value,
+                        year.value,
+                        run.value,
+                    );
+
+                    if (enabled) {
+
+                        let castList = document.querySelectorAll('#castDisplay > div > p');
+                        let actorArray = [];
+                        let i = 0;
+                        for (i = 0; i < castList.length; i++) {
                         }
-                    }
 
-
-
-
-
-                    for (let aName of castList) {
-                        let actorFetch = fetch(`http://localhost:8080/actors/get/${aName.textContent}`).then((response) => {
-                            if (response.status != 200) {
-                                console.error(response)
-                            }
-                            else {
-                                return response.json().then((data) => {
-                                    actorAssign(data);
+                        let l = 0;
+                        actorAssign = (data) => {
+                            l++;
+                            if (l < i) {
+                                actorArray.push(data[0].id);
+                            } else {
+                                actorArray.push(data[0].id)
+                                console.log(actorArray);
+                                let actorObj;
+                                let actorIdArray = [];
+                                for (let v = 0; v < actorArray.length; v++) {
+                                    actorObj = {
+                                        id: actorArray[v]
+                                    }
+                                    actorIdArray.push(actorObj);
+                                }
+                                console.log(actorIdArray);
+                                let movieObj = {
+                                    title: title.value,
+                                    year: year.value,
+                                    runtime: run.value,
+                                    cast: actorIdArray,
+                                    synopsis: synopsis.value,
+                                    rating: rating.value
+                                }
+                                fetch("http://localhost:8080/movies/create", {
+                                    method: "POST",
+                                    headers: {
+                                        "content-type": "application/JSON"
+                                    },
+                                    body: JSON.stringify(movieObj)
+                                }).then((response) => {
+                                    if (response.status != 201) {
+                                        console.error(response);
+                                    } else {
+                                        alert(`Status: ${response.status}`);
+                                        response.json().then((data) => {
+                                            console.log(data);
+                                        })
+                                    } fetch("http://localhost:8080")
                                 })
                             }
-                        })
+                        }
 
 
+
+
+
+                        for (let aName of castList) {
+                            fetch(`http://localhost:8080/actors/get/${aName.textContent}`).then((response) => {
+                                if (response.status != 200) {
+                                    console.error(response)
+                                }
+                                else {
+                                    return response.json().then((data) => {
+                                        actorAssign(data);
+                                    })
+                                }
+                            })
+
+
+                        }
+                        // console.log(
+                        //     title.value,
+                        //     year.value,
+                        //     run.value,
+
+                        // );
+
+                        let movie = {
+                        }
+                        // fetch("http://localhost:8080/movies/create", {
+                        //     method: "POST",
+                        //     headers: {
+                        //         "content-type": "application/JSON"
+                        //     },
+                        //     body: JSON.stringify(movie)
+                        // }).then()
                     }
-                    // console.log(
-                    //     title.value,
-                    //     year.value,
-                    //     run.value,
-
-                    // );
-
-                    let movie = {
-                    }
-                    // fetch("http://localhost:8080/movies/create", {
-                    //     method: "POST",
-                    //     headers: {
-                    //         "content-type": "application/JSON"
-                    //     },
-                    //     body: JSON.stringify(movie)
-                    // }).then()
                 }
 
                 submitBtn.addEventListener('click', actorFunction);
@@ -265,7 +328,7 @@ movieCreateBtn.addEventListener('click', () => {
                 main.appendChild(ratingText);
                 main.appendChild(rating);
                 main.appendChild(ratingVerbose);
-                main.appendChild(submitBtn)
+                main.appendChild(submitBtn);
 
                 console.log("appended");
 
