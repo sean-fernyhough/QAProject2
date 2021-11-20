@@ -9,7 +9,7 @@ public class WebConfig implements WebMvcConfigurer {
 	
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/**").addResourceLocations("classpath:/static/", "file:///C:/Users/ferns/Desktop/Project2/");
+		registry.addResourceHandler("/**").addResourceLocations("classpath:/static/", "file:my_movies");
 	}
 
 }
