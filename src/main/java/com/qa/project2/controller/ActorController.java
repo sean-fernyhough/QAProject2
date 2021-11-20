@@ -36,6 +36,11 @@ public class ActorController {
 		return new ResponseEntity<List<Actor>>(this.service.readAll(), HttpStatus.OK);
 	}
 	
+	@GetMapping("/get/id/{id}")
+	public ResponseEntity<Actor> readById(@PathVariable long id){
+		return new ResponseEntity<Actor>(this.service.readById(id), HttpStatus.OK);
+	}
+	
 	@GetMapping("/get/{name}")
 	public ResponseEntity<List<Actor>> readAllByName(@PathVariable String name){
 		return new ResponseEntity<List<Actor>>(this.service.readByName(name), HttpStatus.OK);
