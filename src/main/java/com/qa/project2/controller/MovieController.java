@@ -36,32 +36,9 @@ public class MovieController {
 	}
 
 	@PostMapping("/image/{id}")
-	public ResponseEntity<Path> imageUpload(@PathVariable long id, @RequestBody MultipartFile image) {
+	public ResponseEntity<Movie> imageUpload(@PathVariable long id, @RequestBody MultipartFile image) throws IOException {
+		return new ResponseEntity<Movie>(service.addImage(id, image),HttpStatus.CREATED);
 
-		Path path = Paths.get("my_movies/static/images/movies/" + id + "/", image.getOriginalFilename());
-		if(Files.exists(path)){
-			try {
-				Path created = Files.write(path, image.getBytes());
-				return new ResponseEntity<Path>(created, HttpStatus.CREATED);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return new ResponseEntity<Path>(path, HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-		}else {
-			new File("my_movies/images/movies/"+id+"/").mkdirs();
-			try {
-				System.out.println("created");
-				Path created = Files.write(path, image.getBytes());
-				return new ResponseEntity<Path>(created, HttpStatus.CREATED);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-				return new ResponseEntity<Path>(path, HttpStatus.INTERNAL_SERVER_ERROR);
-			}
-			
-		
-		}
 
 
 	}
