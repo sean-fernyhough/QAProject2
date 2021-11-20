@@ -21,6 +21,8 @@ public class Movie {
 	@Column(nullable = false)
 	private String title;
 	
+	private String imageUrl;
+	
 	@Column(nullable = true)
 	private int year;
 	
@@ -72,6 +74,14 @@ public class Movie {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
+	public String getImageUrl() {
+		return imageUrl;
+	}
+
+	public void setImageUrl(String imageUrl) {
+		this.imageUrl = imageUrl;
+	}
 
 	public int getYear() {
 		return year;
@@ -113,15 +123,16 @@ public class Movie {
 		this.rating = rating;
 	}
 
+
 	@Override
 	public String toString() {
-		return "Movie [id=" + id + ", title=" + title + ", year=" + year + ", runtime=" + runtime + ", cast=" + cast
-				+ ", synopsis=" + synopsis + ", rating=" + rating + "]";
+		return "Movie [id=" + id + ", title=" + title + ", imageUrl=" + imageUrl + ", year=" + year + ", runtime="
+				+ runtime + ", cast=" + cast + ", synopsis=" + synopsis + ", rating=" + rating + "]";
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(cast, rating, runtime, synopsis, title, year);
+		return Objects.hash(cast, imageUrl, rating, runtime, synopsis, title, year);
 	}
 
 	@Override
@@ -133,13 +144,9 @@ public class Movie {
 		if (getClass() != obj.getClass())
 			return false;
 		Movie other = (Movie) obj;
-		return Objects.equals(cast, other.cast)
+		return Objects.equals(cast, other.cast) && Objects.equals(imageUrl, other.imageUrl)
 				&& Double.doubleToLongBits(rating) == Double.doubleToLongBits(other.rating) && runtime == other.runtime
 				&& Objects.equals(synopsis, other.synopsis) && Objects.equals(title, other.title) && year == other.year;
 	}
-
-
-	
-	
 	
 }

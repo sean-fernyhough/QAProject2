@@ -1,8 +1,16 @@
 package com.qa.project2.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.qa.project2.domain.Movie;
 import com.qa.project2.exceptions.MovieNotFoundException;
@@ -46,6 +54,34 @@ public class MovieService {
 		return !repo.existsById(id);
 	}
 
+	public Movie addImage(long id, MultipartFile image) throws IOException {
+		System.out.println(image.getOriginalFilename());
+		String[] imageArray = image.getOriginalFilename().split("\\.");
+		imageArray[0] = Long.toString(id);
+		String filename = String.join(".", imageArray);
+		System.out.println(filename);
+		
+		Path path = Paths.get("my_movies/images/movies/" + id + "/", filename);
+		Path created;
+		if(Files.exists(path)){
+
+				created = Files.write(path, image.getBytes());
+				System.out.println(created);
+
+		}else {
+			new File("my_movies/images/movies/"+id+"/").mkdirs();
+
+				created = Files.write(path, image.getBytes());
+				System.out.println(created.toString());
+
+			
+		
+		}
+		Movie existing = repo.findById(id).orElseThrow(MovieNotFoundException::new);
+		existing.setImageUrl(created.toString());
+		return repo.saveAndFlush(existing);
+	}
+	
 	public List<Movie> readAllByYear(int year) {
 		List<Movie> movies;
 		if ((movies = repo.findAllByYear(year)).size() < 1) {throw new NoMoviesFoundException();};
