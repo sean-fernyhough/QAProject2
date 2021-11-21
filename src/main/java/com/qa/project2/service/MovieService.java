@@ -55,7 +55,6 @@ public class MovieService {
 	}
 
 	public Movie addImage(long id, MultipartFile image) throws IOException {
-		System.out.println(image.getOriginalFilename());
 		String[] imageArray = image.getOriginalFilename().split("\\.");
 		imageArray[0] = Long.toString(id);
 		String filename = String.join(".", imageArray);

@@ -52,7 +52,7 @@ public class ActorController {
 	}
 	
 	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<Actor> delete(long id){
+	public ResponseEntity<Actor> delete(@PathVariable long id){
 		return this.service.delete(id)? new ResponseEntity<Actor>(HttpStatus.NO_CONTENT):new ResponseEntity<Actor>(HttpStatus.NOT_FOUND);
 	}
 	
