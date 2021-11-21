@@ -1,40 +1,176 @@
 
+
+
 let data = JSON.parse(localStorage.getItem("data"));
 let searchType = localStorage.getItem("searchType");
 localStorage.clear();
+
+let page = document.querySelector('body');
+
 let createCardActor = (actor) => {
     let card = document.createElement('div');
-    // let image = document.createElement('img');
     let body = document.createElement('div');
+    let deleteBtn = document.createElement('button');
+    let editBtn = document.createElement('button');
+    let id = document.createElement('p');
     let title = document.createElement('h5');
-    // let actorDescription = document.createElement('p');
 
-    // image.srcset = actor.image;
     title.textContent = `${actor.firstName} ${actor.lastName}`;
 
     card.classList = "card";
     body.classList = "card-body";
-    // image.classList = "card-img-top";
-    // image.alt = `image of ${actor.firstName} ${actor.lastName}`;
     title.classList = "card-title";
-    // actorDescription .classList = "card-text";
 
     body.appendChild(title);
-    // body.appendChild(actorDescription );
 
-    // card.appendChild(image);
     card.appendChild(body);
     card.style = "min-width: 20%";
 
+
+
+    card.id = `id${actor.id}`;
+    deleteBtn.style = "position: absolute; z-index: 3; right: 0px"
+    deleteBtn.classList = "btn-close";
+    editBtn.style = "display: flex; position: absolute; z - index: 3; right: 30px; padding: 0px; margin: 0px; width: 20px; height: 20px; justify - content: center; opacity: 50 %; top: 2px"
+    editBtn.style.opacity = "50%"
+    editBtn.classList = "btn";
+    let editImage = document.createElement('img');
+    editImage.src = "images/gear.png";
+    editImage.style = "width:20px; height:20px"
+    editBtn.appendChild(editImage);
+    id.style = "position: absolute; z-index: 3; left :3px;";
+    id.textContent = actor.id;
+
+    deleteBtn.addEventListener('click', (button) => {
+        let cardId = button.target.parentElement.id;
+        let deleteId = cardId.split('id').join('');
+        if (confirm(`Are you sure you would like to remove ${actor.firstName} ${actor.lastName} from the database?`)) {
+            fetch(`http://localhost:8080/actors/delete/${deleteId}`, {
+                method: "DELETE",
+                headers: {
+                    "contentType": "application/JSON"
+                }
+            }).then((response) => {
+                if (response.status == 500) {
+                    alert("please remove this actor from any existing movies first");
+                } if (response.status != 204) {
+                    console.error(response.statusText);
+                } else {
+                    container.removeChild(document.querySelector(`#${cardId}`));
+                }
+            })
+        }
+    })
+
+    editBtn.addEventListener('click', (button) => {
+        let cardId = button.target.parentElement.parentElement.id;
+        let editId = cardId.split('id').join('');
+        fetch(`http://localhost:8080/actors/get/id/${editId}`).then((response) => {
+            if (response.status != 200) {
+                console.error(response)
+            } else {
+                response.json().then((data) => {
+
+                    let main = document.createElement('div');
+                    main.classList = "d-grid justify-content-center align-items-center align-self-center"
+                    main.id = "actorMenu";
+                    let overlay = document.createElement('div');
+                    overlay.id = "overlay";
+
+
+                    let fNameText = document.createElement('p');
+                    fNameText.textContent = "First Name:"
+                    let fNameInput = document.createElement('input');
+                    fNameInput.value = data.firstName;
+
+                    let lNameText = document.createElement('p');
+                    lNameText.textContent = "Last Name:"
+                    let lNameInput = document.createElement('input');
+                    lNameInput.value = data.lastName;
+
+                    let closeBtn = document.createElement('button');
+                    closeBtn.style = "position: absolute; top: 20px; right:20px";
+                    closeBtn.classList = "btn-close";
+
+                    let submitBtn = document.createElement('button');
+                    submitBtn.textContent = "Update";
+                    submitBtn.classList = "btn btn-outline-success";
+                    submitBtn.type = "button";
+                    submitBtn.addEventListener('click', () => {
+                        if (fNameInput.value == "" || lNameInput.value == "") {
+                            nameError();
+                            console.error("name required");
+                        } else {
+                            console.log(overlay);
+                            let newActor = {
+                                "firstName": fNameInput.value,
+                                "lastName": lNameInput.value,
+                            }
+                            page.removeChild(document.querySelector('#actorMenu'));
+                            page.removeChild(document.querySelector('#overlay'));
+                            fetch(`http://localhost:8080/actors/update/${editId}`, {
+                                method: "PUT",
+                                headers: {
+                                    "content-Type": "application/JSON"
+                                },
+                                body: JSON.stringify(newActor)
+                            }).then((response) => {
+                                if (response.status != 202) {
+                                    console.error(response);
+                                } else {
+                                    response.json().then((data) => {
+                                        console.log(data);
+                                        ActorUpdated()
+
+                                    })
+                                }
+                            })
+                        }
+                    });
+
+
+                    overlay.addEventListener('click', () => {
+                        page.removeChild(document.querySelector('#actorMenu'));
+                        page.removeChild(document.querySelector('#overlay'));
+                    })
+
+                    closeBtn.addEventListener('click', () => {
+                        page.removeChild(document.querySelector('#actorMenu'));
+                        page.removeChild(document.querySelector('#overlay'));
+                    })
+
+                    main.appendChild(fNameText);
+                    main.appendChild(fNameInput);
+                    main.appendChild(lNameText);
+                    main.appendChild(lNameInput);
+                    main.appendChild(submitBtn);
+                    page.appendChild(overlay);
+                    main.appendChild(closeBtn);
+                    page.appendChild(main);
+                })
+            }
+        })
+    });
+
+
+
+    card.appendChild(deleteBtn);
+    card.appendChild(editBtn);
+    card.appendChild(id);
+    card.appendChild(body);
+    card.style = "min-width: 300px";
+
     container.appendChild(card);
+
 }
+
 
 let createCardMovie = (movie) => {
     let card = document.createElement('div');
     let deleteBtn = document.createElement('button');
     let editBtn = document.createElement('button');
     let id = document.createElement('p');
-    // let image = document.createElement('img');
+    let image = document.createElement('img');
     let body = document.createElement('div');
     let title = document.createElement('h5');
     let releaseText = document.createElement('p');
@@ -42,6 +178,17 @@ let createCardMovie = (movie) => {
     let castText = document.createElement('p');
     let ratingText = document.createElement('p');
     let runtimeText = document.createElement('p');
+
+    let newUrl;
+    if (movie.imageUrl != null) {
+        newUrl = movie.imageUrl.replace(/\\/g, "/");
+    } else {
+        newUrl = "images/empty.png";
+    }
+    image.src = newUrl;
+    title.textContent = movie.title;
+    releaseText.textContent = `Release Year: ${movie.year}`;
+    runtimeText.textContent = `Approx. Runtime: ${movie.runtime} minutes`;
 
     card.id = `id${movie.id}`;
     deleteBtn.style = "position: absolute; z-index: 3; right: 0px"
@@ -55,10 +202,7 @@ let createCardMovie = (movie) => {
     editBtn.appendChild(editImage);
     id.style = "position: absolute; z-index: 3; left :3px;";
     id.textContent = movie.id;
-    // image.srcset = movie.image;
-    title.textContent = movie.title;
-    releaseText.textContent = `Release Year: ${movie.release}`;
-    runtimeText.textContent = `Approx. Runtime: ${movie.runtime}`;
+
     let nameArray = [];
     for (let i = 0; i < movie.cast.length; i++) {
         nameArray.push(`${movie.cast[i].firstName} ${movie.cast[i].lastName}`);
@@ -69,8 +213,8 @@ let createCardMovie = (movie) => {
 
     card.classList = "card";
     body.classList = "card-body";
-    // image.classList = "card-img-top";
-    // image.alt = `image of ${movie.title}`;
+    image.classList = "card-img-top";
+    image.alt = `image of ${movie.title}`;
     title.classList = "card-title";
     releaseText.classList = "card-text";
     synopsisText.classList = "card-text";
@@ -124,15 +268,15 @@ let createCardMovie = (movie) => {
 
                     let main = document.createElement('div');
                     main.classList = "d-grid justify-content-center align-items-center align-self-center"
-                    main.style = "overflow: auto; background-color: white; position: fixed; z-index: 10; min-width: 40%; max-width: 97%; min-height: 40%; max-height: 90%; border-radius: 50px; padding: 20px; margin: 0px 30px 0px 30px; top:10%; bottom:10%"
-                    main.id = "menu";
-                    console.log("create menu")
+                    // main.style = "overflow: auto; background-color: white; position: fixed; z-index: 10; min-width: 40%; max-width: 97%; min-height: 40%; max-height: 90%; border-radius: 50px; padding: 20px; margin: 0px 30px 0px 30px; top:10%; bottom:10%"
+                    main.id = "movieMenu";
+
                     let overlay = document.createElement('div');
                     overlay.id = "overlay";
                     overlay.style = "position: fixed; z-index: 5; min-height: 100%; min-width: 100%; background-color: rgba(0, 0, 0, 0.50);";
                     overlay.addEventListener('click', () => {
-                        body.removeChild(document.querySelector('#menu'));
-                        body.removeChild(document.querySelector('#overlay'));
+                        page.removeChild(document.querySelector('#movieMenu'));
+                        page.removeChild(document.querySelector('#overlay'));
                     })
 
 
@@ -146,14 +290,22 @@ let createCardMovie = (movie) => {
                                 console.log(cast)
                                 cast.sort()
 
+                                let closeBtn = document.createElement('button');
+                                closeBtn.classList = "btn-close";
+                                closeBtn.style = "position: absolute; right: 20px; top : 20px"
 
 
                                 let titleText = document.createElement('p');
                                 titleText.textContent = "Title:"
                                 let title = document.createElement('input');
                                 title.type = "text";
-                                title.classList = "has-validation";
                                 title.value = `${oldTitle}`;
+
+                                let imageText = document.createElement('p');
+                                imageText.textContent = "Select an image:";
+                                let imageBtn = document.createElement('input');
+                                imageBtn.type = "file";
+
                                 let yearText = document.createElement('p');
                                 let runText = document.createElement('p');
                                 let yearRunText = document.createElement('div');
@@ -205,29 +357,29 @@ let createCardMovie = (movie) => {
                                     let curActor = document.createElement('option');
                                     curActor.textContent = `${actor.firstName} ${actor.lastName}`;
                                     curActor.value = `${actor.firstName} ${actor.lastName}`;
-                                    curActor.addEventListener('click', (click) => {
-                                        let name = click.target.value;
-                                        defaultCast.selected = true;
-                                        console.log(name);
-                                        let addedActor = document.createElement('div');
-                                        addedActor.style = "display:flex; justify-content: space-between; background-color: off-white; border-style: solid; border-width:0.5px; border-radius: 10px; padding: 5px; margin: 3px"
-                                        let addedActorName = document.createElement('p');
-                                        addedActorName.textContent = name;
-                                        addedActorName.style = "display:inline; margin: 0px 10px 0px 0px;"
-                                        actorRemoveBtn = document.createElement('button');
-                                        actorRemoveBtn.addEventListener('click', (obj) => {
-                                            let parent = obj.target.parentElement;
-                                            castDisplay.removeChild(parent);
-                                        })
-                                        actorRemoveBtn.type = "button";
-                                        actorRemoveBtn.classList = "btn-close";
-                                        addedActor.appendChild(addedActorName);
-                                        addedActor.appendChild(actorRemoveBtn);
-                                        castDisplay.appendChild(addedActor);
-                                    })
                                     castDropDown.appendChild(curActor);
-                                }
-                                actorSearch = document.createElement('input');
+                                } castDropDown.addEventListener('change', (click) => {
+                                    let name = click.target.value;
+                                    defaultCast.selected = true;
+                                    console.log(name);
+                                    let addedActor = document.createElement('div');
+                                    addedActor.style = "display:flex; justify-content: space-between; background-color: off-white; border-style: solid; border-width:0.5px; border-radius: 10px; padding: 5px; margin: 3px"
+                                    let addedActorName = document.createElement('p');
+                                    addedActorName.textContent = name;
+                                    addedActorName.style = "display:inline; margin: 0px 10px 0px 0px;"
+                                    let actorRemoveBtn = document.createElement('button');
+                                    actorRemoveBtn.addEventListener('click', (obj) => {
+                                        let parent = obj.target.parentElement;
+                                        castDisplay.removeChild(parent);
+                                    })
+                                    actorRemoveBtn.type = "button";
+                                    actorRemoveBtn.classList = "btn-close";
+                                    addedActor.appendChild(addedActorName);
+                                    addedActor.appendChild(actorRemoveBtn);
+                                    castDisplay.appendChild(addedActor);
+                                })
+
+                                let actorSearch = document.createElement('input');
                                 actorSearch.placeholder = "Or search for an actor here";
                                 actorSearch.addEventListener('input', (input) => {
                                     if (main.querySelector('#actorList')) {
@@ -264,7 +416,7 @@ let createCardMovie = (movie) => {
                                                             })
 
                                                             actorItem.addEventListener('mouseover', () => {
-                                                                actorItem.style = "background-color: blue; cursor:default"
+                                                                actorItem.style = "background-color: #ffac11; cursor:default"
                                                             })
 
                                                             actorItem.addEventListener('click', (click) => {
@@ -296,11 +448,18 @@ let createCardMovie = (movie) => {
                                     }
                                 })
                                 let synopsisText = document.createElement('p');
-                                synopsisText.textContent = "Enter a description of the movie:";
                                 let synopsis = document.createElement('textArea');
                                 synopsis.placeholder = "Description here...";
                                 synopsis.value = `${oldSynopsis}`;
-                                synopsis.maxlength = 255;
+                                synopsisText.textContent = `Enter a description of the movie (${255 - synopsis.value.length} left):`;
+                                synopsis.addEventListener('keypress', (input) => {
+                                    if (synopsis.value.length > 254) {
+                                        synopsisText.textContent = `Enter a description of the movie (${255 - synopsis.value.length} left):`;
+                                        input.preventDefault();
+                                    } else {
+                                        synopsisText.textContent = `Enter a description of the movie (${255 - synopsis.value.length} left):`;
+                                    }
+                                })
                                 let ratingText = document.createElement('p');
                                 ratingText.textContent = "Give the Movie a rating (0 - 5) :"
                                 let rating = document.createElement('input');
@@ -316,7 +475,7 @@ let createCardMovie = (movie) => {
                                     ratingVerbose.textContent = `Rating: ${ratingValue}/5`;
                                 })
                                 ratingVerbose.textContent = `Rating: ${oldRating}/5`;
-                                submitBtn = document.createElement('button');
+                                let submitBtn = document.createElement('button');
                                 submitBtn.textContent = "Update";
                                 submitBtn.classList = "btn btn-outline-success";
                                 submitBtn.type = "button";
@@ -329,13 +488,13 @@ let createCardMovie = (movie) => {
                                     if (title.value == "") {
                                         enabled = false;
 
-                                        alert("Movie requires a title");
+                                        TitleError();
                                     }
 
                                     if (synopsis.value.length > 255) {
                                         enabled = false;
 
-                                        alert("description can not be longer than 255 characters");
+                                        DescriptionError();
                                     }
 
                                     if (enabled) {
@@ -381,11 +540,31 @@ let createCardMovie = (movie) => {
                                                     if (response.status != 202) {
                                                         console.error(response);
                                                     } else {
-                                                        alert(`Status: ${response.status}`);
                                                         response.json().then((data) => {
                                                             console.log(data);
-                                                            body.removeChild(document.querySelector('#menu'));
-                                                            body.removeChild(document.querySelector('#overlay'));
+                                                            page.removeChild(document.querySelector('#movieMenu'));
+                                                            page.removeChild(document.querySelector('#overlay'));
+                                                            MovieUpdated();
+
+                                                            const formData = new FormData();
+                                                            formData.append('image', imageBtn.files[0]);
+
+                                                            fetch(`http://localhost:8080/movies/image/${data.id}`, {
+                                                                method: "POST",
+                                                                body: formData,
+
+                                                            }).then((response) => {
+                                                                if (response.status != 201) {
+                                                                    console.error(response.statusText);
+                                                                } else {
+                                                                    response.json().then((data) => {
+                                                                        console.log(data.imageUrl);
+                                                                        let newUrl = data.imageUrl.replace(/\\/g, "/");
+                                                                        console.log(newUrl);
+                                                                    })
+                                                                }
+                                                            })
+
                                                         })
                                                     }
                                                 })
@@ -428,8 +607,25 @@ let createCardMovie = (movie) => {
                                                     alert(`Status: ${response.status}`);
                                                     response.json().then((data) => {
                                                         console.log(data);
-                                                        body.removeChild(document.querySelector('#menu'));
-                                                        body.removeChild(document.querySelector('#overlay'));
+                                                        page.removeChild(document.querySelector('#movieMenu'));
+                                                        page.removeChild(document.querySelector('#overlay'));
+                                                        MovieUpdated();
+                                                        const formData = new FormData();
+                                                        formData.append('image', imageBtn.files[0]);
+                                                        fetch(`http://localhost:8080/movies/image/${data.id}`, {
+                                                            method: "POST",
+                                                            body: formData,
+                                                        }).then((response) => {
+                                                            if (response.status != 201) {
+                                                                console.error(response.statusText);
+                                                            } else {
+                                                                response.json().then((data) => {
+                                                                    console.log(data.imageUrl);
+                                                                    let newUrl = data.imageUrl.replace(/\\/g, "/");
+                                                                    console.log(newUrl);
+                                                                })
+                                                            }
+                                                        })
                                                     })
                                                 }
                                             })
@@ -438,11 +634,18 @@ let createCardMovie = (movie) => {
                                     }
                                 }
 
+                                closeBtn.addEventListener('click', () => {
+                                    page.removeChild(document.querySelector('#movieMenu'));
+                                    page.removeChild(document.querySelector('#overlay'));
+                                })
+
                                 submitBtn.addEventListener('click', actorFunction);
 
-
+                                main.appendChild(closeBtn);
                                 main.appendChild(titleText);
                                 main.appendChild(title);
+                                main.appendChild(imageText);
+                                main.appendChild(imageBtn);
                                 yearRunText.appendChild(yearText);
                                 yearRunText.appendChild(runText);
                                 main.appendChild(yearRunText);
@@ -460,8 +663,8 @@ let createCardMovie = (movie) => {
                                 main.appendChild(ratingVerbose);
                                 main.appendChild(submitBtn);
 
-                                body.appendChild(overlay);
-                                body.appendChild(main);
+                                page.appendChild(overlay);
+                                page.appendChild(main);
                             })
                         }
                     })
@@ -480,7 +683,7 @@ let createCardMovie = (movie) => {
     card.appendChild(deleteBtn);
     card.appendChild(editBtn);
     card.appendChild(id);
-    // card.appendChild(image);
+    card.appendChild(image);
     card.appendChild(body);
     card.style = "min-width: 300px";
 

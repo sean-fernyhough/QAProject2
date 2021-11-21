@@ -15,7 +15,7 @@ let pickRandom = (movieList) => {
 
 let createCard = (movie) => {
     let card = document.createElement('div');
-    // let image = document.createElement('img');
+    let image = document.createElement('img');
     let body = document.createElement('div');
     let title = document.createElement('h5');
     let releaseText = document.createElement('p');
@@ -24,14 +24,20 @@ let createCard = (movie) => {
     let ratingText = document.createElement('p');
     let runtimeText = document.createElement('p');
 
-    // image.srcset = movie.image;
+    let newUrl;
+    if (movie.imageUrl != null) {
+        console.log("not null")
+        newUrl = movie.imageUrl.replace(/\\/g, "/");
+    } else {
+        newUrl = "images/empty.png";
+    }
+    image.src = newUrl;
     title.textContent = movie.title;
-    releaseText.textContent = `Release Year: ${movie.release}`;
-    runtimeText.textContent = `Approx. Runtime: ${movie.runtime}`;
+    releaseText.textContent = `Release Year: ${movie.year}`;
+    runtimeText.textContent = `Approx. Runtime: ${movie.runtime} minutes`;
     let nameArray = [];
     for (let i = 0; i < movie.cast.length; i++) {
         nameArray.push(` ${movie.cast[i].firstName} ${movie.cast[i].lastName}`);
-        console.log(nameArray);
     }
     castText.textContent = `Cast: ${nameArray.join()}`;
     synopsisText.textContent = `Synopsis: ${movie.synopsis}`;
@@ -39,8 +45,8 @@ let createCard = (movie) => {
 
     card.classList = "card";
     body.classList = "card-body";
-    // image.classList = "card-img-top";
-    // image.alt = `image of ${movie.title}`;
+    image.classList = "card-img-top";
+    image.alt = `image of ${movie.title}`;
     title.classList = "card-title";
     releaseText.classList = "card-text";
     synopsisText.classList = "card-text";
@@ -55,7 +61,7 @@ let createCard = (movie) => {
     body.appendChild(synopsisText);
     body.appendChild(ratingText);
 
-    // card.appendChild(image);
+    card.appendChild(image);
     card.appendChild(body);
 
     container.appendChild(card);
@@ -64,10 +70,11 @@ let createCard = (movie) => {
 let getAll = () => {
     fetch(`http://localhost:8080/movies/get`).then((response) => {
         if (response.status != 200) {
-            console.log(response);
+            console.error(response);
         } else if (response.status == 404) {
-            alert("There are no movies in the database, please create one");
-            console.log(response);
+            let message = document.createElement('p');
+            message.textContent = "There are no movies in the database, please create some using the new dropdown menu above.";
+            message.appendChild(message);
         }
         else {
             response.json().then((data) => {
