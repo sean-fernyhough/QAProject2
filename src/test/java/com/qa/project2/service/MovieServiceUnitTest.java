@@ -2,6 +2,7 @@ package com.qa.project2.service;
 
 import static org.mockito.Mockito.times;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -12,6 +13,8 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.qa.project2.domain.Actor;
 import com.qa.project2.domain.Movie;
@@ -74,6 +77,42 @@ public class MovieServiceUnitTest {
 		
 		Mockito.verify(repo, times(1)).deleteById(1l);
 		Mockito.verify(repo, times(2)).existsById(1l);
+	}
+	
+	@Test
+	void addImage() throws IOException{
+		Actor actor1 = new Actor("sample", "actor1", null);
+		Actor actor2 = new Actor("sample", "actor2", null);
+		List<Actor> cast = new ArrayList<Actor>();
+		cast.add(actor1);
+		cast.add(actor2);
+
+		Movie movie = new Movie("title", 1990, 120, cast, "synopsis", 3.7);
+
+		
+		MultipartFile file = new MockMultipartFile("file.jpg", new byte[1]);
+		
+		Mockito.when(repo.findById(1l)).thenReturn(Optional.of(movie));
+		Mockito.when(repo.saveAndFlush(movie)).thenReturn(movie);
+		
+		Assertions.assertEquals(movie, service.addImage(1l, file));
+	}
+	
+	@Test
+	void readByIdTest() {
+		Actor actor1 = new Actor("sample", "actor1", null);
+		Actor actor2 = new Actor("sample", "actor2", null);
+		List<Actor> cast = new ArrayList<Actor>();
+		cast.add(actor1);
+		cast.add(actor2);
+
+		Movie movie = new Movie("title", 1990, 120, cast, "synopsis", 3.7);
+
+		Mockito.when(repo.findById(1l)).thenReturn(Optional.of(movie));
+		
+		Assertions.assertEquals(movie, service.readById(1l));
+
+		
 	}
 	
 	@Test
