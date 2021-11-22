@@ -18,6 +18,7 @@ CREATE TABLE `MOVIE`
 `year` INT,
 `rating` DECIMAL(2,1),
 `runtime` INT,
+`image_url` varchar(255),
 PRIMARY KEY(id)
 );
 

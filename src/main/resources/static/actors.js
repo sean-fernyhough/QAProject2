@@ -1,4 +1,5 @@
 'use strict'
+let page = document.querySelector('body');
 
 let createCardActor = (actor) => {
     let card = document.createElement('div');
@@ -27,7 +28,6 @@ let createCardActor = (actor) => {
     card.appendChild(body);
     card.style = "min-width: 20%";
 
-    container.appendChild(card);
 
 
     card.id = `id${actor.id}`;
@@ -49,14 +49,16 @@ let createCardActor = (actor) => {
         let cardId = button.target.parentElement.id;
         let deleteId = cardId.split('id').join('');
         if (confirm(`Are you sure you would like to remove ${actor.firstName} ${actor.lastName} from the database?`)) {
-            fetch(`http://localhost:8080/movies/delete/${deleteId}`, {
+            fetch(`http://localhost:8080/actors/delete/${deleteId}`, {
                 method: "DELETE",
                 headers: {
                     "contentType": "application/JSON"
                 }
             }).then((response) => {
-                if (response.status != 204) {
-                    console.error(response.message);
+                if (response.status == 500) {
+                    alert("please remove this actor from any existing movies first");
+                } if (response.status != 204) {
+                    console.error(response.statusText);
                 } else {
                     container.removeChild(document.querySelector(`#${cardId}`));
                 }
@@ -76,12 +78,11 @@ let createCardActor = (actor) => {
 
                     let main = document.createElement('div');
                     main.classList = "d-grid justify-content-center align-items-center align-self-center"
-                    main.style = "overflow: auto; background-color: white; position: fixed; z-index: 10; min-width: 40%; max-width: 97%; min-height: 40%; max-height: 90%; border-radius: 50px; padding: 20px; margin: 0px 30px 0px 30px;"
-                    main.id = "menu";
-                    console.log("create menu")
+                    // main.style = "overflow: auto; background-color: white; position: fixed; z-index: 10; min-width: 40%; max-width: 97%; min-height: 40%; max-height: 90%; border-radius: 50px; padding: 20px; margin: 0px 30px 0px 30px;"
+                    main.id = "actorMenu";
                     let overlay = document.createElement('div');
-                    overlay.id = "overlay"
-                    overlay.style = "position: fixed; z-index: 5; min-height: 100%; min-width: 100%; background-color: rgba(0, 0, 0, 0.50);";
+                    overlay.id = "overlay";
+
 
                     let fNameText = document.createElement('p');
                     fNameText.textContent = "First Name:"
@@ -93,12 +94,17 @@ let createCardActor = (actor) => {
                     let lNameInput = document.createElement('input');
                     lNameInput.value = data.lastName;
 
+                    let closeBtn = document.createElement('button');
+                    closeBtn.style = "position: absolute; top: 20px; right:20px";
+                    closeBtn.classList = "btn-close";
+
                     let submitBtn = document.createElement('button');
                     submitBtn.textContent = "Update";
                     submitBtn.classList = "btn btn-outline-success";
                     submitBtn.type = "button";
                     submitBtn.addEventListener('click', () => {
                         if (fNameInput.value == "" || lNameInput.value == "") {
+                            nameError();
                             console.error("name required");
                         } else {
                             console.log(overlay);
@@ -106,8 +112,8 @@ let createCardActor = (actor) => {
                                 "firstName": fNameInput.value,
                                 "lastName": lNameInput.value,
                             }
-                            body.removeChild(document.querySelector('#menu'));
-                            body.removeChild(document.querySelector('#overlay'));
+                            page.removeChild(document.querySelector('#actorMenu'));
+                            page.removeChild(document.querySelector('#overlay'));
                             fetch(`http://localhost:8080/actors/update/${editId}`, {
                                 method: "PUT",
                                 headers: {
@@ -115,11 +121,12 @@ let createCardActor = (actor) => {
                                 },
                                 body: JSON.stringify(newActor)
                             }).then((response) => {
-                                if (response.status != 201) {
+                                if (response.status != 202) {
                                     console.error(response);
                                 } else {
                                     response.json().then((data) => {
                                         console.log(data);
+                                        ActorUpdated()
 
                                     })
                                 }
@@ -129,18 +136,23 @@ let createCardActor = (actor) => {
 
 
                     overlay.addEventListener('click', () => {
-                        body.removeChild(document.querySelector('#menu'));
-                        body.removeChild(document.querySelector('#overlay'));
+                        page.removeChild(document.querySelector('#actorMenu'));
+                        page.removeChild(document.querySelector('#overlay'));
                     })
 
+                    closeBtn.addEventListener('click', () => {
+                        page.removeChild(document.querySelector('#actorMenu'));
+                        page.removeChild(document.querySelector('#overlay'));
+                    })
 
                     main.appendChild(fNameText);
                     main.appendChild(fNameInput);
                     main.appendChild(lNameText);
                     main.appendChild(lNameInput);
                     main.appendChild(submitBtn);
-                    body.appendChild(overlay);
-                    body.appendChild(main);
+                    page.appendChild(overlay);
+                    main.appendChild(closeBtn);
+                    page.appendChild(main);
                 })
             }
         })
@@ -151,7 +163,6 @@ let createCardActor = (actor) => {
     card.appendChild(deleteBtn);
     card.appendChild(editBtn);
     card.appendChild(id);
-    // card.appendChild(image);
     card.appendChild(body);
     card.style = "min-width: 300px";
 

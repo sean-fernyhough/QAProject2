@@ -1,0 +1,167 @@
+.autolist {
+    overflow-y: auto;
+    position: absolute;
+    z-index: 15;
+    right: 93px;
+    top: 50px;
+    min-width: 227px;
+    max-height: 300px;
+    background-color: white;
+    border-style: solid;
+    border-width: 1px;
+    padding: 3px 0px;
+    border-radius: 3px;
+}
+
+
+.actorList {
+    overflow: auto;
+    position: absolute;
+    z-index: 15;
+    justify-self: center;
+    /* top: 315px; */
+    min-width: 300px;
+    max-height: 300px;
+    background-color: white;
+    border-style: solid;
+    border-width: 1px;
+    padding: 3px 0px;
+    border-radius: 3px;
+    margin-top: 240px;
+}
+
+
+/* min-height: 100%;
+min-width: 100%" */
+
+#overlay {
+    position: absolute;
+    z-index: 5;
+    min-height: 100%;
+    min-width: 100%;
+    background-color: rgba(0, 0, 0, 0.50);
+}
+
+#movieMenu {
+    overflow: auto;
+    background-color: white;
+    position: fixed;
+    z-index: 10;
+    min-width: 40%;
+    max-width: 97%;
+    min-height: 90%;
+    max-height: 90%;
+    border-radius: 50px;
+    padding: 20px;
+    margin: 0px 30px 0px 30px;
+    top: 5%;
+    bottom: 5%
+}
+
+#actorMenu {
+    overflow: auto;
+    background-color: white;
+    position: fixed;
+    z-index: 10;
+    min-width: 40%;
+    max-width: 97%;
+    min-height: 40%;
+    max-height: 90%;
+    border-radius: 50px;
+    padding: 20px;
+    margin: 0px 30px 0px 30px;
+    top: 10%;
+    bottom: 10%
+}
+
+#castDisplay {
+    overflow: auto;
+    min-width: 250px;
+    min-height: 40px;
+    max-height: 140px;
+    border-radius: 10px;
+    border-style: solid;
+    border-width: 1px;
+    grid-column: 1;
+}
+
+#castDrop {
+    margin: 20px 0px 20px 0px;
+
+}
+
+.card {
+    width: 300px;
+}
+
+.card img {
+    width: 298px;
+}
+
+p {
+    margin-bottom: 5px;
+}
+
+@media only screen and (max-width: 760px) {
+
+    body {
+        background-color: aqua;
+    }
+
+    #movieMenu {
+        overflow: auto;
+        background-color: white;
+        position: fixed;
+        z-index: 10;
+        min-width: 80%;
+        max-width: 97%;
+        min-height: 98%;
+        border-radius: 50px;
+        padding: 20px;
+        margin: 0px 30px 0px 30px;
+        top: 1%;
+
+    }
+
+    #actorMenu {
+        overflow: auto;
+        background-color: white;
+        position: fixed;
+        z-index: 10;
+        min-width: 60%;
+        max-width: 97%;
+        min-height: 20%;
+        max-height: 30%;
+        border-radius: 50px;
+        padding: 20px;
+        margin: 0px 30px 0px 30px;
+        top: 30%;
+        bottom: 30%
+    }
+
+    .card {
+        width: unset;
+        min-width: 90%;
+    }
+
+    .card img {
+        width: unset;
+        min-width: 98%;
+    }
+
+    .autolist {
+        overflow-y: auto;
+        position: absolute;
+        z-index: 15;
+        right: 0px;
+        top: 270px;
+        min-width: 100%;
+        max-height: 200px;
+        background-color: white;
+        border-style: solid;
+        border-width: 1px;
+        padding: 3px 0px;
+        border-radius: 3px;
+    }
+
+}

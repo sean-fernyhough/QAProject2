@@ -38,15 +38,8 @@ public class MovieController {
 	@PostMapping("/image/{id}")
 	public ResponseEntity<Movie> imageUpload(@PathVariable long id, @RequestBody MultipartFile image) throws IOException {
 		return new ResponseEntity<Movie>(service.addImage(id, image),HttpStatus.CREATED);
-
-
-
 	}
 
-//	@PutMapping("/update/image/movie{id}")
-//	public ResponseEntity<Movie> update(@PathVariable long id, @RequestBody Movie movie) {
-//		return new ResponseEntity<Movie>(service.update(id, movie), HttpStatus.ACCEPTED);
-//	}
 
 	@PostMapping("/create")
 	public ResponseEntity<Movie> create(@RequestBody Movie movie) {

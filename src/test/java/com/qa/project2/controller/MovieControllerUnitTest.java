@@ -2,6 +2,7 @@ package com.qa.project2.controller;
 
 import static org.mockito.Mockito.times;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.qa.project2.domain.Actor;
 import com.qa.project2.domain.Movie;
@@ -78,6 +80,39 @@ public class MovieControllerUnitTest {
 		Assertions.assertEquals(new ResponseEntity<Movie>(updatedMovie, HttpStatus.ACCEPTED), controller.update(1l, movie));
 		
 		Mockito.verify(service, times(1)).update(1l, movie);
+	}
+	
+	@Test
+	void readByIdTest() {
+		Actor actor1 = new Actor("sample", "actor1", null);
+		Actor actor2 = new Actor("sample", "actor2", null);
+		List<Actor> cast = new ArrayList<Actor>();
+		cast.add(actor1);
+		cast.add(actor2);
+		Movie movie = new Movie("title", 1990, 120, cast, "synopsis", 3.7);
+		Mockito.when(service.readById(1l)).thenReturn(movie);
+		
+		Assertions.assertEquals(new ResponseEntity<Movie>(movie, HttpStatus.OK), controller.readById(1l));
+		
+		Mockito.verify(service, times(1)).readById(1l);
+	}
+	
+	@Test
+	void imageUploadTest() throws IOException {
+		
+		MultipartFile file = null;
+		
+		Actor actor1 = new Actor("sample", "actor1", null);
+		Actor actor2 = new Actor("sample", "actor2", null);
+		List<Actor> cast = new ArrayList<Actor>();
+		cast.add(actor1);
+		cast.add(actor2);
+		Movie movie = new Movie("title", 1990, 120, cast, "synopsis", 3.7);
+		Mockito.when(service.addImage(1l, file)).thenReturn(movie);
+		
+		Assertions.assertEquals(new ResponseEntity<Movie>(movie, HttpStatus.CREATED), controller.imageUpload(1l, file));
+		
+		Mockito.verify(service, times(1)).addImage(1l, file);
 	}
 
 	@Test
