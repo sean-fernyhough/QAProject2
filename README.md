@@ -73,7 +73,7 @@ I use git and [github](https://github.com) for versioning.
 
 ## Authors
 
-* Sean Fernyhough - *order and item functionality, testing, built standalone executable* - [sean-fernyhough](https://github.com/sean-fernyhough)
+* Sean Fernyhough - *backend (using spring) and frontend functionality, testing, built standalone executable* - [sean-fernyhough](https://github.com/sean-fernyhough)
 
 ## License
 
