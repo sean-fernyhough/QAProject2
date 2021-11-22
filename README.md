@@ -63,6 +63,9 @@ Coding style tests simply refer to checking that the code conforms to standard c
 
 To deploy this program simply run the compiled .jar file and connect to http:/localhost:8080.
 
+## Next Steps
+This project could be improved with the addition of a homepage, as well as improving the many to many relationship between movies and actors within spring to allow actors to be deleted from existing movies.
+
 ## Built With
 
 * [Maven](https://maven.apache.org/) - Dependency Management
